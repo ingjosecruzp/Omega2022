@@ -1,0 +1,49 @@
+ion-content {
+    //--background: #F4315D;
+    //--padding-top:15000px;
+    //--offset-top:0.8px !important;
+}
+
+ion-toolbar {
+    //--background: #F4315D;
+    //--border-color: #F4315D;
+    --border-width: 0px;
+    ion-title {
+        // --color: #F4315D;
+    }
+}
+
+ion-card {
+    box-shadow: none !important;
+}
+
+.ripple-parent {
+    position: relative;
+    overflow: hidden;
+}
+
+.downLoadSytle {
+    position: absolute;
+    z-index: 5;
+    top: 52%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    color: #ffffff;
+    font-size: 1.5em;
+}
+
+ion-segment-button {
+    text-transform: none;
+}
+
+ion-button {
+    --border-color: #F4315D;
+    --color: #F4315D;
+    --background-activated: #f4315d3d;
+}
+
+ion-progress-bar {
+    --buffer-background: #c3aded;
+    --progress-background:#6228cf;
+}

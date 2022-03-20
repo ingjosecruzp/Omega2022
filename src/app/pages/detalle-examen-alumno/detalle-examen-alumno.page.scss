@@ -1,0 +1,27 @@
+ion-card {
+    box-shadow: none !important;
+}
+
+ion-button {
+    --border-color: #F4315D;
+    --color: #F4315D;
+    --background-activated: #f4315d3d;
+}
+
+.my-custom-class {
+    height: 50%;
+}
+
+div.pregunta p:first-child {
+    display: inline;
+    background-color: red;
+}
+
+////Variables ejercicio Relacionar
+ion-col>div {
+    background-color: #f7f7f7;
+    border: solid 1px #ddd;
+    padding: 10px;
+    min-height: 115px !important;
+    text-align: center;
+}

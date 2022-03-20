@@ -1,0 +1,178 @@
+<ion-backdrop #backDrop tappable="false" [ngStyle]="{'display': backDropVisible === false ? 'none' : 'block' }"></ion-backdrop>
+<ion-progress-bar *ngIf="spiner" type="indeterminate" style="background: white;"></ion-progress-bar>
+<ion-header>
+    <ion-toolbar>
+        <ion-title *ngIf="botonHeaderVisible" style="padding-left: 5px;">
+            <span style="padding-left: 17px;padding-top: 5px;float: left;">
+            <countdown  #countdown [config]="{leftTime : [duracionExamen],demand: false }" (event)="eventCountdown($event)"></countdown>
+            </span>
+            <span>Pregunta</span>
+            <span>
+               <ion-button [disabled]="botonPopoverDisable" style="--background: #ffffff00;
+               color: black;
+               --color: black;
+               --background-activated: #d4d4d461;
+               width: auto;
+               height: 21px;
+               font-size: 17px;
+               margin-bottom: 14px;
+               margin-left: 0px;
+               font-weight: 600;" (click)="abrirPopover($event)">
+               {{contadorPregunta}}/{{totalPreguntas}}
+              
+              <ion-icon slot="end" style="width: 12px;" name="chevron-down-outline"></ion-icon>
+            </ion-button> 
+            </span>
+        </ion-title>
+        <ion-title *ngIf="instruccionesVisible">Instrucciones</ion-title>
+        <ion-title *ngIf="headerResultadoVisible">Resultado</ion-title>
+
+        <ion-buttons slot="end">
+            <ion-button style="margin-top: 8px;margin-right: 8px;" (click)="closeModal()">
+                <ion-icon slot="icon-only" color="danger" name="close"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-slides #slider style="height: initial;" [options]='slideOpts'>
+        <ion-slide style="display: block;" *ngIf="item.status!='Finalizado' ">
+
+            <ion-card *ngIf="instruccionesVisible" style="text-align: initial;    border-bottom: 0px solid #d0d0d0;border-left: none;" class="ion-activatable ripple-parent" mode="ios">
+                <ion-card-header>
+                    <ion-card-title style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{item.Titulo}}</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                    <div style="font-weight: 600;">Fecha aplicación: <span style="font-weight: 400;">{{item.FechaInicio  | date:'medium' }}</span></div>
+                    <div style="font-weight: 600;">Descripción: </div>
+                    <div [innerHTML]="item.Descripcion |  sanitizePipe"></div><br>
+                    <div style="font-weight: 600;">Instrucciones generales: <span style="font-weight: 400;"><br> <p><b>1.</b> Tienes <b>{{item.DuracionExamen}}</b> minutos para responder a las siguientes <b>{{item.TotalPreguntas}}</b> preguntas.<br><br> <b>2.</b> Lee atentamente cada pregunta, tendrás un cronometro indicándote cuanto tiempo llevas.<br><br> <b>3.</b> Puedes omitir preguntas y volver a ellas más tarde.</p></span></div>
+                </ion-card-content>
+            </ion-card>
+
+
+
+        </ion-slide>
+        <ion-slide style="display: block;" *ngIf="!esRelacionar && item.status!='Finalizado'">
+            <!--*ngIf="item.status!='Finalizado'"-->
+            <ion-list>
+                <ion-radio-group [(ngModel)]="respuestaSeleccionada">
+                    <ion-list-header>
+                        <ion-label #child style="text-align: initial;" [innerHtml]="preguntaInfo['Pregunta']  | sanitizePipe"></ion-label>
+                    </ion-list-header>
+
+                    <ion-item *ngFor="let item of respuestas">
+
+                        <div [innerHtml]="item.Respuesta | sanitizePipe"></div>
+                        <ion-radio slot="start" color="success" value={{item.Id}} mode="md"></ion-radio>
+                    </ion-item>
+
+                </ion-radio-group>
+
+            </ion-list>
+        </ion-slide>
+        <!-- ///////////////slide Ejercicio Relacionar///////////////////-->
+        <ion-slide style="display: block;" *ngIf="esRelacionar && item.status!='Finalizado' ">
+            <!--*ngIf="item.status!='Finalizado'"-->
+            <ion-list-header>
+                <ion-label #child style="text-align: initial;" [innerHtml]="preguntaInfo['Pregunta']  | sanitizePipe"></ion-label>
+            </ion-list-header>
+            <ion-grid>
+                <ion-row *ngFor="let item of preguntasRelacionar;let i = index" class="ion-align-items-center" style="justify-content: center;">
+                    <ion-col class="ion-align-self-center">
+                        <div #p style="border-radius: 30px;margin: 15px;border: none;background-color: #ffffff;height: 100%;max-width: 250px;" (click)="clickEjercicioRelacionar($event,item,i+1)" [innerHtml]="item.Respuesta | sanitizePipe"></div>
+                    </ion-col>
+                    <ion-col class="ion-align-self-center">
+                        <div #r style="border-radius: 30px;margin: 15px;border: none;background-color: #ffffff;height: 100%;max-width: 250px;" (click)="clickEjercicioRelacionar($event,respuestas[i],i+1)" [innerHtml]="respuestas[i].Respuesta | sanitizePipe"></div>
+                    </ion-col>
+                </ion-row>
+
+            </ion-grid>
+
+
+        </ion-slide>
+        <ion-slide style="height: 63vh;" *ngIf="item.status!='Finalizado'">
+            <div>
+                <div>
+                    <ion-label style="font-size: 17px;font-weight: 600;text-align: center;text-overflow: ellipsis;white-space: nowrap;">
+                        ¿Deseas finalizar el examen?
+                    </ion-label>
+                </div>
+                <div>
+                    <ion-buttons>
+                        <ion-button style="margin: 22px;border-width: 1px; border-style: solid;border-radius: 9px;padding: 6px;" (click)="preguntaFinalizarExamen()">Terminar y ver resultados</ion-button>
+                    </ion-buttons>
+                </div>
+            </div>
+        </ion-slide>
+        <ion-slide style="display: block;">
+
+
+            <ion-card style="margin-bottom: 0px;margin-top: 0px;text-align: initial;border-bottom: 0.6px solid rgb(208, 208, 208);border-left: none;border-radius: 0px !important;box-shadow: none !important;" class="ion-activatable ripple-parent" mode="ios">
+                <!--<ion-ripple-effect></ion-ripple-effect>-->
+                <ion-card-header>
+                    <ion-card-title style="font-size: 20px;">Resultados</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                    <div style="font-weight: 600;">Iniciado: <span style="font-weight: 400;">{{resultadoExamen?.Iniciado}}</span></div>
+                    <div style="font-weight: 600;">Duración: <span style="font-weight: 400;">{{resultadoExamen?.Duracion}} minutos.</span></div>
+                    <div style="font-weight: 600;">Score: <span style="font-weight: 400;">{{resultadoExamen?.Puntaje}} {{resultadoExamen?.PuntajePorcentaje}}%</span></div>
+                </ion-card-content>
+            </ion-card>
+            <ion-list>
+                <ion-virtual-scroll [items]="resultadoExamen?.Preguntas" approxItemHeight="230px" style="z-index: 999999;">
+                    <ion-card style="margin-bottom: 0px;margin-top: 0px;text-align: initial;border-bottom: 0.6px solid rgb(208, 208, 208);border-left: none;border-radius: 0px !important;box-shadow: none !important;" *virtualItem="let item; let i=index" mode="ios">
+
+                        <ion-card-header>
+                            <ion-card-title style="font-size: 20px;">
+                                {{i+1}}.-
+                                <div class="pregunta" [innerHTML]="item.Pregunta | sanitizePipe"></div>
+                            </ion-card-title>
+                        </ion-card-header>
+                        <ion-card-content *ngIf="item.TipoPregunta=='multipleUnaRespuesta'">
+                            <div style="font-weight: 600;">Respuesta: <span style="font-weight: 400;" [innerHTML]="item.Respuesta | sanitizePipe" *ngIf="item.Respuesta!=undefined"></span><span style="font-weight: 400;" *ngIf="item.Respuesta==undefined">No contestaste ninguna respuesta.</span></div>
+                            <div style="font-weight: 600;">Respuesta correcta: <span style="font-weight: 400;" [innerHTML]="item.RespuestaCorrecta  | sanitizePipe"></span></div>
+                            <div style="font-weight: 600;">Score: <span style="font-weight: 400;">{{item.Score}}</span></div>
+                        </ion-card-content>
+                        <ion-card-content *ngIf="item.TipoPregunta=='relacionarPreguntas'">
+                            <div style="font-weight: 600;">Tipo de pregunta:<br> <span style="font-weight: 400;">Relacionar</span></div>
+                            <div style="font-weight: 600;">Aciertos: <span style="font-weight: 400;">{{item.Aciertos}}</span></div>
+                            <div style="font-weight: 600;">Score: <span style="font-weight: 400;">{{item.Score}}</span></div>
+                        </ion-card-content>
+                    </ion-card>
+                </ion-virtual-scroll>
+            </ion-list>
+        </ion-slide>
+        <ion-slide style="height: 63vh;" *ngIf="item.status!='Finalizado'">
+            <div>
+                <div>
+                    <ion-label style="font-size: 17px;font-weight: 600;text-align: center;text-overflow: ellipsis;">
+                        <!--{{ textoInformacionInicioFin }} <br> {{fechaAplicacionExamen | date:'medium'}}-->
+                        {{ textoInformacionInicioFin }} <br> {{ fechaAplicacionExamen| date:'mediumDate'}} {{ fechaAplicacionExamen | date:'mediumTime'}}
+                    </ion-label>
+                </div>
+
+            </div>
+        </ion-slide>
+    </ion-slides>
+
+</ion-content>
+<ion-footer style="transform: translateY(-1px);">
+    <ion-toolbar>
+        <ion-button *ngIf="botonHeaderVisible" [disabled]='botonSiguienteDisable' style="width: 160.06px;" slot="end" size="small" fill="outline" type="button" icon-start outline block (click)="cambioPregunta('siguiente',null)">
+            {{textoBoton}}
+            <ion-icon name="caret-forward-outline" style="margin-right: 3px;"></ion-icon>
+        </ion-button>
+        <ion-button *ngIf="botonHeaderVisible" [disabled]='botonAnteriorDisable' style="width: 160.06px;" slot="start" size="small" fill="outline" type="button" icon-start outline block (click)="cambioPregunta('anterior',null)">
+            <ion-icon name="caret-back-outline" style="margin-right: 3px;"></ion-icon>
+            Anterior
+        </ion-button>
+        <ion-button *ngIf="instruccionesVisible" [disabled]='botonIcinicarExamenDisable' style="width: 160.06px;" slot="end" size="small" fill="outline" type="button" icon-start outline block (click)="iniciarExamen(null)">
+            <ion-icon name="play-circle-outline" style="margin-right: 3px;"></ion-icon>
+            Iniciar Examen
+        </ion-button>
+
+
+    </ion-toolbar>
+</ion-footer>

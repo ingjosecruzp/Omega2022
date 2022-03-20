@@ -1,0 +1,160 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+
+/* Core CSS required for Ionic components to work properly */
+
+@import "~@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+
+@import "~@ionic/angular/css/normalize.css";
+@import "~@ionic/angular/css/structure.css";
+@import "~@ionic/angular/css/typography.css";
+@import '~@ionic/angular/css/display.css';
+
+/* Optional CSS utils that can be commented out */
+
+@import "~@ionic/angular/css/padding.css";
+@import "~@ionic/angular/css/float-elements.css";
+@import "~@ionic/angular/css/text-alignment.css";
+@import "~@ionic/angular/css/text-transformation.css";
+@import "~@ionic/angular/css/flex-utils.css";
+@font-face {
+    font-family: 'MyriadProRegular'; //This is what we are going to call
+    src: url('../src/assets/fonts/MyriadProRegular.ttf');
+}
+
+
+/*Hace que el modal salga hasta un punto en especifico*/
+
+.my-custom-modal-css .modal-wrapper {
+    height: 82%;
+    top: 21%;
+    position: absolute;
+    display: block;
+    border-top-right-radius: 44px;
+    border-top-left-radius: 44px;
+    background-color: #ffffff;
+    width: 100%;
+}
+
+.my-custom-modal-css-capturas .modal-wrapper {
+    /*height: 72%;
+    top: 28%;*/
+    height: 74%;
+    top: 27%;
+    position: absolute;
+    display: block;
+    border-top-right-radius: 44px;
+    border-top-left-radius: 44px;
+    background-color: #00000000;
+    width: 100%;
+}
+
+.toastCenter {
+    text-align: center;
+}
+
+.mbsc-fr-btn {
+    display: none !important;
+}
+
+.left-align-buttons .action-sheet-button-inner.sc-ion-action-sheet-ios {
+    justify-content: flex-start;
+    font-size: 18px;
+}
+
+$mbsc-ios-accent: #e61d2a;
+$mbsc-material-accent: #e61d2a;
+$mbsc-mobiscroll-accent: #e61d2a;
+$mbsc-mobiscroll-frame-background: white;
+.mbsc-mobiscroll .mbsc-lv-item {
+    background: #ffffff !important;
+}
+
+.estiloParrafo {
+    color: black !important;
+    font-size: 15px !important;
+}
+
+.pregunta {
+    display: inline-block;
+}
+
+.ql-container {
+    height: 200px;
+    max-height: 200px;
+    overflow: scroll;
+}
+
+.ql-editor {
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+.ql-snow .ql-editor img {
+    max-width: 100% !important;
+    all: unset;
+}
+
+@import "~@mobiscroll/angular/dist/css/mobiscroll.angular.scss";
+@import '~quill/dist/quill.core.css';
+@import '~quill/dist/quill.snow.css';
+//picker
+.sc-ion-picker-ios-h {
+    --background: #0c0c0c !important;
+    color: white;
+    --border-radius: 23px;
+    .picker-above-highlight {
+        background-color: #0c0c0c;
+        background: none;
+    }
+    .picker-below-highlight {
+        background-color: #0c0c0c;
+        background: none;
+    }
+    .picker-button {
+        color: #ffffff;
+        .ion-activated {
+            color: #ffffff !important;
+        }
+    }
+    .picker-toolbar {
+        border: none;
+    }
+}
+
+app-home {
+    //  background: #6228cf;
+}
+
+//***Estilos para ajustar texto de los ion-select Jose
+//For Radio Options
+
+/*.alert-radio-label.sc-ion-alert-md,
+.alert-radio-label.sc-ion-alert-ios {
+   white-space: normal;
+}
+.alert-tappable.alert-radio {
+   height: auto;
+   contain: content;
+}
+
+//For Checkbox
+.alert-checkbox-label.sc-ion-alert-md,
+.alert-checkbox-label.sc-ion-alert-ios {
+   white-space: normal;
+}
+.alert-tappable.alert-checkbox {
+   height: auto;
+   contain: content;
+}*/

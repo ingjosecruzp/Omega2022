@@ -1,0 +1,210 @@
+<ion-progress-bar *ngIf="spiner" type="indeterminate"></ion-progress-bar>
+<div *ngIf="getTipoUsuario()=='Director'; then izquierdaTemplate else derechaTemplate"></div>
+<ng-template #izquierdaTemplate>
+    <!-- Kinder -->
+    <ion-item button lines="none" detail="false" (click)="abrirKinder()">
+        <h1 #botonKinder class="accordion">Kinder</h1>
+    </ion-item>
+    <div class="images">
+        <div class="panel" #panelKinder style="max-height: 0;display: none;" status="close">
+            <div class="one-image" *ngFor="let item of libros  | filter : 'Kinder' : 'Escolaridad'">
+                <!--<div style="width: 100px;height: 100px;background-color: red;position: absolute;z-index: 2;top: 40%;left: 50%;margin-right: -50%;transform: translate(-50%, -50%);"></div>-->
+                <app-circle-progress [ngStyle]="{'display' : item.descarga}" [item]="item" (click)="openBook(item)" style="position: absolute;z-index: 3;top: 40%;left: 50%;margin-right: -50%;transform: translate(-50%, -50%);cursor: pointer;"></app-circle-progress>
+                <ion-icon name="cloud-download" [ngStyle]="{'display' : item.flecha}" class="downLoadSytle" (click)="openBook(item)"></ion-icon>
+                <ion-spinner name="crescent" [ngStyle]="{'display' : item.spinner}" class="spinnerStyle"></ion-spinner>
+                <div style="position:relative" style="cursor: pointer;">
+                    <img [src]="item.RutaThumbnails" loading="lazy" class="image-rouder" width="100%" height="100%" [ngStyle]="{'aspect-ratio': item.AspectRatio}" style="height: auto; width: 100%;cursor: pointer;" (click)="openBook(item)">
+                    <div class="grid-container" style="position: relative;width: 100%">
+                        <div class="grid-item item1">
+                            <div class="version">
+                                <span>{{item.Version}}</span>
+                            </div>
+                            {{item.Nombre}}
+                        </div>
+                        <div class="grid-item item2" style="width: 30px;height: 30px;border-radius: 50%;text-align: left;">
+                            <ion-avatar>
+                                <img style="width: 30px;height: 30px;" loading="lazy" src="{{item.Icono}}">
+                            </ion-avatar>
+                        </div>
+                        <!--<div class="grid-item item2" style="width: 30px;height: 30px;background-color: #6228cf; border-radius: 50%;text-align: left;">
+                                    <ion-avatar>
+                                        <img style="width: 30px;height: 30px;" [src]="sanitizer.bypassSecurityTrustResourceUrl(item.Icono)" >
+                                    </ion-avatar>
+                                </div>-->
+                        <div class="grid-item item3">{{item.Grados}}{{item.Suffix}} Grade</div>
+                        <div class="grid-item item4">{{item.Escolaridad}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Termina Kinder -->
+    <!-- Primaria -->
+    <ion-item button lines="none" detail="false" (click)="abrirPrimaria()">
+        <h1 #botonPrimaria class="accordion">Primaria</h1>
+    </ion-item>
+    <div class="images">
+        <div class="panel" #panelPrimaria style="max-height: 0;display: none;" status="close">
+            <div class="one-image" *ngFor="let item of libros  | filter : 'Elementary School' : 'Escolaridad'">
+                <!--<div style="width: 100px;height: 100px;background-color: red;position: absolute;z-index: 2;top: 40%;left: 50%;margin-right: -50%;transform: translate(-50%, -50%);"></div>-->
+                <app-circle-progress [ngStyle]="{'display' : item.descarga}" [item]="item" (click)="openBook(item)" style="position: absolute;z-index: 3;top: 40%;left: 50%;margin-right: -50%;transform: translate(-50%, -50%);cursor: pointer;"></app-circle-progress>
+                <ion-icon name="cloud-download" [ngStyle]="{'display' : item.flecha}" class="downLoadSytle" (click)="openBook(item)"></ion-icon>
+                <ion-spinner name="crescent" [ngStyle]="{'display' : item.spinner}" class="spinnerStyle"></ion-spinner>
+                <div style="position:relative" style="cursor: pointer;">
+                    <img [src]="item.RutaThumbnails" loading="lazy" class="image-rouder" width="100%" height="100%" [ngStyle]="{'aspect-ratio': item.AspectRatio}" style="height: auto; width: 100%;cursor: pointer;" (click)="openBook(item)">
+                    <div class="grid-container" style="position: relative;width: 100%">
+                        <div class="grid-item item1">
+                            <div class="version">
+                                <span>{{item.Version}}</span>
+                            </div>
+                            {{item.Nombre}}
+                        </div>
+                        <div class="grid-item item2" style="width: 30px;height: 30px; border-radius: 50%;text-align: left;">
+                            <ion-avatar>
+                                <img style="width: 30px;height: 30px;" loading="lazy" src="{{item.Icono}}">
+                            </ion-avatar>
+                        </div>
+                        <!--<div class="grid-item item2" style="width: 30px;height: 30px;background-color: #6228cf; border-radius: 50%;text-align: left;">
+                                    <ion-avatar>
+                                        <img style="width: 30px;height: 30px;" [src]="sanitizer.bypassSecurityTrustResourceUrl(item.Icono)" >
+                                    </ion-avatar>
+                                </div>-->
+                        <div class="grid-item item3">{{item.Grados}}{{item.Suffix}} Grade</div>
+                        <div class="grid-item item4">{{item.Escolaridad}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Termina Primaria -->
+    <!-- Secundaria -->
+    <ion-item button lines="none" detail="false" (click)="abrirSecundaria()">
+        <h1 #botonSecundaira class="accordion">Secundaria</h1>
+    </ion-item>
+    <div class="images">
+        <div class="panel" #panelSecundaria style="max-height: 0;display: none;" status="close">
+            <div class="one-image" *ngFor="let item of libros  | filter : 'Junior High School' : 'Escolaridad'">
+                <!--<div style="width: 100px;height: 100px;background-color: red;position: absolute;z-index: 2;top: 40%;left: 50%;margin-right: -50%;transform: translate(-50%, -50%);"></div>-->
+                <app-circle-progress [ngStyle]="{'display' : item.descarga}" [item]="item" (click)="openBook(item)" style="position: absolute;z-index: 3;top: 40%;left: 50%;margin-right: -50%;transform: translate(-50%, -50%);cursor: pointer;"></app-circle-progress>
+                <ion-icon name="cloud-download" [ngStyle]="{'display' : item.flecha}" class="downLoadSytle" (click)="openBook(item)"></ion-icon>
+                <ion-spinner name="crescent" [ngStyle]="{'display' : item.spinner}" class="spinnerStyle"></ion-spinner>
+                <div style="position:relative" style="cursor: pointer;">
+                    <img [src]="item.RutaThumbnails" loading="lazy" class="image-rouder" width="100%" height="100%" [ngStyle]="{'aspect-ratio': item.AspectRatio}" style="height: auto; width: 100%;cursor: pointer;" (click)="openBook(item)">
+                    <div class="grid-container" style="position: relative;width: 100%">
+                        <div class="grid-item item1">
+                            <div class="version">
+                                <span>{{item.Version}}</span>
+                            </div>
+                            {{item.Nombre}}
+                        </div>
+                        <div class="grid-item item2" style="width: 30px;height: 30px; border-radius: 50%;text-align: left;">
+                            <ion-avatar>
+                                <img style="width: 30px;height: 30px;" loading="lazy" src="{{item.Icono}}">
+                            </ion-avatar>
+                        </div>
+                        <!--<div class="grid-item item2" style="width: 30px;height: 30px;background-color: #6228cf; border-radius: 50%;text-align: left;">
+                                    <ion-avatar>
+                                        <img style="width: 30px;height: 30px;" [src]="sanitizer.bypassSecurityTrustResourceUrl(item.Icono)" >
+                                    </ion-avatar>
+                                </div>-->
+                        <div class="grid-item item3">{{item.Grados}}{{item.Suffix}} Grade</div>
+                        <div class="grid-item item4">{{item.Escolaridad}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Termina Secundaria -->
+    <!-- Preparatoria -->
+    <ion-item button lines="none" detail="false" (click)="abrirPreparatoria()">
+        <h1 #botonPreparatoria class="accordion">Preparatoria</h1>
+    </ion-item>
+    <div class="images">
+        <div class="panel" #panelPreparatoria style="max-height: 0;display: none;" status="close">
+            <div class="one-image" *ngFor="let item of libros  | filter : 'High School' : 'Escolaridad'">
+                <!--<div style="width: 100px;height: 100px;background-color: red;position: absolute;z-index: 2;top: 40%;left: 50%;margin-right: -50%;transform: translate(-50%, -50%);"></div>-->
+                <app-circle-progress [ngStyle]="{'display' : item.descarga}" [item]="item" (click)="openBook(item)" style="position: absolute;z-index: 3;top: 40%;left: 50%;margin-right: -50%;transform: translate(-50%, -50%);cursor: pointer;"></app-circle-progress>
+                <ion-icon name="cloud-download" [ngStyle]="{'display' : item.flecha}" class="downLoadSytle" (click)="openBook(item)"></ion-icon>
+                <ion-spinner name="crescent" [ngStyle]="{'display' : item.spinner}" class="spinnerStyle"></ion-spinner>
+                <div style="position:relative" style="cursor: pointer;">
+                    <img [src]="item.RutaThumbnails" loading="lazy" class="image-rouder" width="100%" height="100%" [ngStyle]="{'aspect-ratio': item.AspectRatio}" style="height: auto; width: 100%;cursor: pointer;" (click)="openBook(item)">
+                    <div class="grid-container" style="position: relative;width: 100%">
+                        <div class="grid-item item1">
+                            <div class="version">
+                                <span>{{item.Version}}</span>
+                            </div>
+                            {{item.Nombre}}
+                        </div>
+                        <div class="grid-item item2" style="width: 30px;height: 30px; border-radius: 50%;text-align: left;">
+                            <ion-avatar>
+                                <img style="width: 30px;height: 30px;" loading="lazy" src="{{item.Icono}}">
+                            </ion-avatar>
+                        </div>
+                        <!--<div class="grid-item item2" style="width: 30px;height: 30px;background-color: #6228cf; border-radius: 50%;text-align: left;">
+                                    <ion-avatar>
+                                        <img style="width: 30px;height: 30px;" [src]="sanitizer.bypassSecurityTrustResourceUrl(item.Icono)" >
+                                    </ion-avatar>
+                                </div>-->
+                        <div class="grid-item item3">{{item.Grados}}{{item.Suffix}} Semester</div>
+                        <div class="grid-item item4">{{item.Escolaridad}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Termina Preparatoria -->
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more books...">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+</ng-template>
+<ng-template #derechaTemplate>
+    <ion-list class="transform">
+        <div class="grid-containermasonry">
+            <div #imgMansory class="grid-itemmasonry" *ngFor="let item of dataList; trackBy: trackBooks;index as i" style="height: auto;">
+                <!--<div style="width: 100px;height: 100px;background-color: red;position: absolute;z-index: 2;top: 40%;left: 50%;margin-right: -50%;transform: translate(-50%, -50%);"></div>-->
+                <!--<img src="assets/img/cover/{{item.RutaThumbnails}}" class="image-rouder" width="100%" style="min-height: 200px;cursor: pointer;" (click)="openBook(item)">-->
+                <div style="position:relative" style="cursor: pointer;">
+					
+                    <img [src]="sanitizer.bypassSecurityTrustResourceUrl(item.RutaThumbnails)" (load)="cargarMansoryPrimeraVez($event)" class="image-rouder masonry-content" width="100%" appBindCssVariable="aspectRatio" [appBindCssVariableValue]="item.AspectRatio" style="cursor: pointer;" (click)="openBook(item)">
+					<app-circle-progress [ngStyle]="{'display' : item.descarga}" [item]="item" (click)="openBook(item)" style="position: absolute;z-index: 3;top: 40%;left: 50%;margin-right: -50%;transform: translate(-50%, -50%);cursor: pointer;"></app-circle-progress>
+					<ion-icon name="cloud-download" [ngStyle]="{'display' : item.flecha}" class="downLoadSytle" (click)="openBook(item)"></ion-icon>
+					<ion-spinner name="crescent" [ngStyle]="{'display' : item.spinner}" class="spinnerStyle"></ion-spinner>
+                    <div class="grid-container" style="position: relative;width: 100%">
+                        <div class="grid-item item1">
+                            <div class="version">
+                                <span>{{item.Version}}</span>
+                            </div>
+                            {{item.Nombre}}
+                        </div>
+                        <div class="grid-item item2" style="width: 30px;height: 30px; border-radius: 50%;text-align: left;">
+                            <ion-avatar>
+                                <img style="width: 30px;height: 30px;" [src]="sanitizer.bypassSecurityTrustResourceUrl(item.Icono)">
+                            </ion-avatar>
+                        </div>
+                        <div class="grid-item item3" style="position:relative;top:1px">
+                            <span *ngIf="item.Escolaridad!='Universidad'" style="position: relative;top: 5px;">{{item.Grados}}</span>
+                            <span *ngIf="item.Escolaridad=='Universidad'" style="position: relative;top: 5px;">Bloque </span>
+                            <span *ngIf="item.Escolaridad!='Universidad'" style="position: relative;top: 5px;">{{item.Suffix}} </span>
+                            <span *ngIf="item.Escolaridad=='Kinder'" style="position: relative;top: 5px;">Grade</span>
+                            <span *ngIf="item.Escolaridad=='Elementary School'" style="position: relative;top: 5px;">Grade</span>
+                            <span *ngIf="item.Escolaridad=='Junior High School'" style="position: relative;top: 5px;">Grade</span>
+                            <span *ngIf="item.Escolaridad=='High School'" style="position: relative;top: 5px;">Semester</span>
+                            <span *ngIf="item.Escolaridad=='Universidad'" style="position: relative;top: 5px;">{{item.Grados}}</span>
+                        </div>
+                        <div *ngIf="item.Escolaridad=='Universidad'" class="grid-item item4" style="position:relative;">Licenciatura SAC</div>
+                        <div *ngIf="item.Escolaridad=='Licenciatura SAC'" class="grid-item item4" style="position:relative;">Licenciatura SAC</div>
+                        <div *ngIf="item.Escolaridad=='Licenciatura'" class="grid-item item4" style="position:relative;">Licenciatura Presencial</div>
+                        <div *ngIf="item.Escolaridad=='Licenciatura Presencial'" class="grid-item item4" style="position:relative;">Licenciatura Presencial</div>
+                        <div *ngIf="item.Escolaridad!='Universidad'" class="grid-item item4" style="position:relative;">{{item.Escolaridad}}</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ion-list>
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)" style="transform: translateY(-51%);">
+        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more books...">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+</ng-template>

@@ -1,0 +1,145 @@
+<ion-item detail="false" slot="fixed" lines="none">
+    <ion-chip (click)="openPicker()" color="danger">
+        <ion-icon name="calendar-outline"></ion-icon>
+        <ion-label>{{mesActual}}</ion-label>
+    </ion-chip>
+
+</ion-item>
+<ion-list style="width: 100%;">
+    <ion-card style="text-align: initial;box-shadow: none;" mode="ios">
+        <ion-card-header>
+            <ion-card-title>Student's Progress Report</ion-card-title>
+            <br>
+            <b>Month:</b> {{mesActual}}
+            <br><br>
+            <b>Level:</b> {{user.Escolaridad}}
+            <br><br>
+            <b>Grade and group:</b> {{user.Grado}} {{user.Grupo}}
+            <br><br><br>
+        </ion-card-header>
+        <ion-card-content>
+            <div #contenedor *ngFor="let item of LstEstadisticas; index as i">
+                <ion-item lines="none" style="--padding-start: 0;position: relative;" detail="false">
+                    <h1 #itemsrefBoton class="accordion " style="font-weight: 600;font-size: 18px;white-space: nowrap;text-overflow: ellipsis;max-width: 254px;overflow: hidden;display: inline-block; ">
+                        {{item.Materia}}
+                    </h1>
+                    <!--<div style="background-color: blue;display: inline-block;position: absolute;right: 0; ">-->
+                    <app-circle-progress-report [porcentaje]="item.Porcentaje" style="display: inline-block;position: absolute;right: -16px;top: 7px; "></app-circle-progress-report>
+                    <!--</div>-->
+                </ion-item>
+                <div class="panel " #itemsref [id]="i" status="close">
+                    <ion-grid style="background-color: white;border-radius: 4px;margin-left: 0; ">
+
+                        <ion-row style="text-align: center; ">
+                            <ion-col size="4 ">
+                                <div>Tarea</div>
+                            </ion-col>
+                            <ion-col size="4 ">
+                                <div>Zoom</div>
+                            </ion-col>
+                            <ion-col size="4 ">
+                                <div>Foro</div>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row style="text-align: center; transform: translateY(-9px); font-size: 9px; text-overflow: clip; white-space: nowrap; ">
+                            <ion-col size="2 ">
+                                <div style="font-weight: 700;font-size: 9px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis; ">Asignado</div>
+                            </ion-col>
+                            <ion-col size="2 ">
+                                <div style="font-weight: 700;font-size: 9px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis; ">Entregado</div>
+                            </ion-col>
+                            <ion-col size="2 ">
+                                <div style="font-weight: 700;font-size: 9px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis; ">Asignado</div>
+                            </ion-col>
+                            <ion-col size="2 ">
+                                <div style="font-weight: 700;font-size: 9px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis; ">Asistencia</div>
+                            </ion-col>
+                            <ion-col size="2 ">
+                                <div style="font-weight: 700;font-size: 9px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis; ">Asignado</div>
+                            </ion-col>
+                            <ion-col size="2 ">
+                                <div style="font-weight: 700;font-size: 9px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis; ">Entregado</div>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row style='text-align: center;transform: translateY(-9px);--ion-default-font: -apple-system, BlinkMacSystemFont, "Helvetica Neue ", "Roboto ", sans-serif;    font-size: 20px; color: #666666;'>
+                            <ion-col size="2 ">
+                                <div style="display: inline-flex;transform: translateX(5px); ">{{item.TareasAsignada}}
+                                    <!--<p style="transform: translateX(11px) translateY(-3px);font-size: 25px; ">-</p>-->
+                                </div>
+
+                            </ion-col>
+                            <ion-col size="2 ">
+                                <div>{{item.TareasEntragadas}}</div>
+                            </ion-col>
+                            <ion-col size="2 ">
+                                <div style="display: inline-flex;transform: translateX(5px); ">{{item.ZoomAsignada}}
+                                    <!--<p style="transform: translateX(11px) translateY(-3px);font-size: 25px; ">-</p>-->
+                                </div>
+                            </ion-col>
+                            <ion-col size="2 ">
+                                <div>{{item.ZoomFaltas}}</div>
+                            </ion-col>
+                            <ion-col size="2 ">
+                                <div style="display: inline-flex;transform: translateX(5px); ">{{item.ForossAsignada}}
+                                    <!--<p style="transform: translateX(11px) translateY(-3px);font-size: 25px; ">-</p>-->
+                                </div>
+                            </ion-col>
+                            <ion-col size="2 ">
+                                <div>{{item.ForosEntragadas}}</div>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                </div>
+            </div>
+
+            <ion-card-subtitle style="text-align: center;font-size: 17px; --color: #000;margin-top: 8px;margin-bottom: 23px;">
+                Totales {{mesActual}}
+            </ion-card-subtitle>
+            <canvas #barChartGlobales>
+
+            </canvas>
+
+            <!--<div style="display: inline-block;padding-left: 13px;">
+                <ion-icon name="stop" style="color:#6228cf"></ion-icon>
+                <ion-label style="padding-left: 5px;">Asignado</ion-label>
+            </div>
+
+            <div style="padding-left: 13px;display: inline-block;">
+                <ion-icon name="stop" style="color:green"></ion-icon>
+                <ion-label style="padding-left: 5px;">Muy Bien</ion-label>
+            </div>
+
+            <div style="padding-left: 13px;display: inline-block;">
+                <ion-icon name="stop" style="color:#ffcc03"></ion-icon>
+                <ion-label style="padding-left: 5px;">Bien</ion-label>
+            </div>
+
+            <div style="padding-left: 13px;display: inline-block;">
+                <ion-icon name="stop" style="color:red"></ion-icon>
+                <ion-label style="padding-left: 5px;">Regular</ion-label>
+            </div>-->
+
+            <ion-chip outline="true" style="border-color: white;z-index: -1;">
+                <ion-icon name="stop" style="color:#6228cf"></ion-icon>
+                <ion-label>Asignado</ion-label>
+            </ion-chip>
+            <ion-chip outline="true" style="border-color: white;z-index: -1;">
+                <ion-icon name="stop" style="color:green"></ion-icon>
+                <ion-label>Muy Bien</ion-label>
+            </ion-chip>
+            <ion-chip outline="true" style="border-color: white;z-index: -1;">
+                <ion-icon name="stop" style="color:#ffcc03"></ion-icon>
+                <ion-label>Bien</ion-label>
+            </ion-chip>
+            <ion-chip outline="true" style="border-color: white;z-index: -1;">
+                <ion-icon name="stop" style="color:red"></ion-icon>
+                <ion-label>Regular</ion-label>
+            </ion-chip>
+
+            <ion-item lines="none">
+
+            </ion-item>
+        </ion-card-content>
+
+    </ion-card>
+</ion-list>

@@ -1,0 +1,127 @@
+import { Component, OnInit, Input, ViewChildren, ElementRef, QueryList, ViewChild, Output, EventEmitter, Renderer2, ChangeDetectorRef } from '@angular/core';
+import { IonSegmentButton, IonSegment,  AnimationController , Animation } from '@ionic/angular';
+
+@Component({
+  selector: 'app-pill-menu',
+  templateUrl: './pill-menu.component.html',
+  styleUrls: ['./pill-menu.component.scss'],
+})
+export class PillMenuComponent implements OnInit {
+  @Input() itemsMenu: any[];
+  @Input() selectOption = 0;
+  @Output() indicatorChanged = new EventEmitter();
+  @Output() clickFab = new EventEmitter();
+  @Output() clickFiltro = new EventEmitter();
+  @Output() clickSegment = new EventEmitter();
+  @ViewChild(IonSegment,{ static: true }) Segment: IonSegment;
+  @ViewChild(IonSegment,{read: ElementRef, static: true }) SegmentRef: ElementRef;
+  @ViewChildren(IonSegmentButton,{ read: ElementRef }) ArraySegemntButtonHTML: QueryList<ElementRef>;
+  @ViewChild('ionsegment', {read: ElementRef, static: true}) ionsegmentHTML: ElementRef;
+  public indexAnterior: number =0;
+  public fabVisible: boolean = true;
+  public fabVisibleFilters: boolean = false;
+
+  constructor(private renderer: Renderer2,private animationCtrl: AnimationController,private cdRef : ChangeDetectorRef) {  }
+
+  ngOnInit() {
+    //this.Segment.value ="3";
+  }
+
+  onClickSegment(index) {
+    //if(this.indexAnterior==0)
+    console.warn("click segment");
+    
+  }
+
+  onClickSegmentPadre(){
+    console.log(this.selectOption);
+  }
+
+  getPillTextSelect(){
+    return this.itemsMenu[this.selectOption];
+  }
+
+  segmentChanged(event) {
+
+    if(event.detail.value==undefined) {
+        this.selectOption=this.indexAnterior;
+        return;
+    }
+    
+    let index = Number(event.detail.value);
+    let element=this.ArraySegemntButtonHTML.toArray()[index].nativeElement;
+    this.indexAnterior = index;
+    this.selectOption = index;
+    
+    /*element.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+      inline: 'center'
+    });*/
+    this.indicatorChanged.emit(event);
+  }
+
+  onClickFab(event) {
+    //console.log(event);
+  //  this.clickFab.emit(event);
+    this.clickFab.emit(this.itemsMenu[this.indexAnterior]);
+  }
+  async onClickFiltro(event) {
+    //console.log(event);
+    event.stopPropagation();
+    console.log("click filtro");
+    //console.log(this.selectOption);
+    console.log(this.Segment.value);
+    this.selectOption = 0;
+    this.Segment.value = "1";
+    this.Segment.swipeGesture = false;
+    this.cdRef.detectChanges();
+  //  this.clickFab.emit(event);
+    //this.clickFiltro.emit();
+  }
+  public visibleFab(value: boolean) {
+    this.fabVisible = value;
+  }
+  
+  public visibleFabFilters(value: boolean) {
+    this.fabVisibleFilters = value;
+  }
+
+  public nextSegment(index) {
+    let element=this.ArraySegemntButtonHTML.toArray()[index].nativeElement;
+    element.click();
+  }
+
+  public changeSegment(index) {
+    //Este metodo cambia el focus de la pildora sin animacion
+    this.selectOption = index;
+  }
+
+  public aplicarSombra() {
+    this.renderer.addClass(this.ionsegmentHTML.nativeElement, 'boxshadowadd');
+  }
+
+  public quitarSombra() {
+    this.renderer.removeClass(this.ionsegmentHTML.nativeElement, 'boxshadowadd');
+    
+  }
+  public animacion() {
+    
+    const animation6: Animation = this.animationCtrl.create('bouceEduardoF')
+    .addElement(this.SegmentRef.nativeElement)
+    .duration(600)
+    .delay(210)
+    .easing(' cubic-bezier(0,.70,.45,1)')
+// .beforeStyles({bottom:'-16vh'})
+ // .afterStyles({bottom:'-16vh'})
+ //   .fromTo('transform', 'translate3d(0, 0, 0)', 'translate3d(0, 40px, 0)')
+    // .fromTo('transform', 'translate3d(0, 67vh, 0)', 'translate3d(0, 0vh, 0)');
+     .keyframes([{ offset: 0, transform: 'translate3d(0, 0vh, 0)' },
+     { offset: 0.6, transform: 'translate3d(0, 0.7vh, 0)' },
+     { offset: 0.9, transform: 'translate3d(0, -.3vh, 0)' },
+ { offset: 1, transform: 'translate3d(0, 0vh, 0)' }, ]);
+
+ animation6.play();
+
+  }
+}
