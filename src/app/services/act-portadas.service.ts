@@ -34,7 +34,6 @@ export class ActPortadasService {
 
   async limpiarLibros(){
     this.libros = [];
-	this.promisesDescargas = [];
   }
 
   async buscarLibros(idioma:string) {
@@ -47,8 +46,6 @@ export class ActPortadasService {
         }
         return;
       }
-
-	  this.promisesDescargas = [];
 
       console.log("buscalibros");
       const pathStorage = await this.globalServicies.getNameStorage();
@@ -68,28 +65,39 @@ export class ActPortadasService {
         if(librosLocales==null) {
 
           console.info("Sin libros en data");
+          this.cargandoAnimation("Descargando portadas");
           const data = await this.booksService.getBooksGrado().toPromise();
-          
+
+          //Aqui va descargar las portadas
+          if(this.platform.is('cordova')) {
+            const url = await this.apiPortadas.getPortadasURL(data).toPromise();
+            await this.downloadPortadas(url["url"]);
+          }
+                  
           await Promise.all(data.map(async (element) => { 
             element.descargado="no"
-            element.VersionThumbnailsLocal=0;
+            //element.VersionThumbnailsLocal=0;
+            element.VersionThumbnailsLocal = element.VersionThumbnails;
              
-            await this.buscarPortadasIndividual(element,pathStorage,status);
+            //await this.buscarPortadasIndividual(element,pathStorage,status);
             await this.prepararLibro(element,timestamp);
           }));
 
-          if(this.promisesDescargas.length > 0) {
+          /*if(this.promisesDescargas.length > 0) {
               await this.descargarPortadas(pathStorage);
-          }
+          }*/
           
           this.libros = data;
           await this.storage.set(pathStorage,data);
 
+          this.loadingController.dismiss();
+          
           if(idioma=="Todos") {
             this.procesoFinalizado.emit(this.libros);
           } else {
             this.procesoFinalizado.emit(this.libros.filter(f => f.Idioma == idioma));
           }
+
           return;
 
         } else {
@@ -165,6 +173,7 @@ export class ActPortadasService {
       
     } catch (error) {
       //alert(error);
+      this.loadingController.dismiss();
       console.error(error);
     }
   }
@@ -387,6 +396,21 @@ export class ActPortadasService {
     });
   }
 
+  async downloadPortadas(url) {
+    try {
+      const fileTransfer: FileTransferObject = this.transfer.create();
+      const nameFile ='covers.zip';
+      const directory = this.file.dataDirectory;
+
+      let entry = await this. fileTransfer.download(url, directory + nameFile);
+      await this.zip.unzip(entry.toURL(), directory + 'covers');
+      await this.file.removeFile(directory,nameFile);
+
+    } catch(err) {
+      throw err;
+    }
+  }
+
   download(url,versionDevice,versionServer) {
     return new Promise(async (resolve,reject) =>{ 
           this.cargandoAnimation("Actualizando fondos");
@@ -395,7 +419,7 @@ export class ActPortadasService {
 
           const nameFile ='covers.zip';
           const directory = this.file.dataDirectory;
-
+          
           //Descarga libro
           fileTransfer.download(url + versionDevice, directory + nameFile).then(entry => {
 
@@ -428,7 +452,7 @@ export class ActPortadasService {
   }
 
   async cargandoAnimation(text) {
-    if(this.loading!= undefined) return;
+    //if(this.loading!= undefined) return;
 
     this.loading = await this.loadingController.create({
       message: text,

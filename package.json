@@ -97,6 +97,8 @@
         "@types/node": "~8.9.4",
         "codelyzer": "^5.0.0",
         "cordova-android": "^8.1.0",
+        "cordova-plugin-androidx": "^3.0.0",
+        "cordova-plugin-androidx-adapter": "^1.1.3",
         "cordova-plugin-camera": "^4.1.0",
         "cordova-plugin-device": "^2.0.2",
         "cordova-plugin-httpd": "^0.9.3",
@@ -143,11 +145,14 @@
             "cordova-plugin-android-permissions": {},
             "cordova-plugin-media": {},
             "onesignal-cordova-plugin": {},
-            "cordova-sqlite-storage": {}
+            "cordova-sqlite-storage": {},
+            "cordova-plugin-androidx": {},
+            "cordova-plugin-androidx-adapter": {}
         },
         "platforms": [
             "browser",
-            "ios"
+            "ios",
+            "android"
         ]
     }
 }

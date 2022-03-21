@@ -10,10 +10,14 @@ export class PortadasService  extends apiBase {
 
   constructor(public http: HttpClient) {
     super();
-    this.Ws = 'api/portadas/v2';
+    this.Ws = 'api/portadas';
   }
 
   getPortadasVersion() {
-    return this.http.get<any[]>(`${this.url}/${this.Ws}`);
+    return this.http.get<any[]>(`${this.url}/${this.Ws}/v2`);
+  }
+
+  getPortadasURL(item:any) {
+    return this.http.post<any[]>(`${this.url}/${this.Ws}/zip/portadasurl`,item);
   }
 }
