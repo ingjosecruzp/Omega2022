@@ -397,18 +397,32 @@ export class ActPortadasService {
   }
 
   async downloadPortadas(url) {
-    try {
+    return new Promise(async (resolve,reject) =>{
       const fileTransfer: FileTransferObject = this.transfer.create();
       const nameFile ='covers.zip';
       const directory = this.file.dataDirectory;
 
-      let entry = await this. fileTransfer.download(url, directory + nameFile);
-      await this.zip.unzip(entry.toURL(), directory + 'covers');
-      await this.file.removeFile(directory,nameFile);
+      this.fileTransfer.download(url, directory + nameFile).catch(entry =>{
+        console.log("//Portadas Descargadas");
+        
+        return this.zip.unzip(entry.toURL(), directory + 'covers');
+      }).then(result => {
+        console.log("//Portadas Descompromido");
+        if(result === 0) { console.log('SUCCESS'); }
+        if(result === -1) { console.log('FAILED'); }
 
-    } catch(err) {
-      throw err;
-    }
+        //Elimina zip para ahorrar espacio
+        return this.file.removeFile(directory,nameFile);
+      }).then(data =>{
+        console.log("//Portadas zip eliminado");
+        resolve("Terminado");
+      }).catch(err => {
+        console.warn(err);
+        /*alert(err);*/
+        reject("Error con la conexión, por favor intente descargar de nuevo");
+      });;
+
+    });
   }
 
   download(url,versionDevice,versionServer) {
@@ -448,7 +462,7 @@ export class ActPortadasService {
             /*alert(err);*/
             reject("Error con la conexión, por favor intente descargar de nuevo");
           });
-        });
+    });
   }
 
   async cargandoAnimation(text) {
