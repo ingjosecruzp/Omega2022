@@ -402,7 +402,13 @@ export class ActPortadasService {
       const nameFile ='covers.zip';
       const directory = this.file.dataDirectory;
 
-      this.fileTransfer.download(url, directory + nameFile).catch(entry =>{
+	  console.log("//Inicia Descarga Portadas");
+	  console.log(url);
+	  console.log(directory);
+	  console.log(nameFile);
+	  console.log(directory + nameFile);
+	
+      fileTransfer.download(url, directory + nameFile).catch(entry =>{
         console.log("//Portadas Descargadas");
         
         return this.zip.unzip(entry.toURL(), directory + 'covers');
@@ -417,11 +423,15 @@ export class ActPortadasService {
         console.log("//Portadas zip eliminado");
         resolve("Terminado");
       }).catch(err => {
-        console.warn(err);
+        console.log(err);
         /*alert(err);*/
         reject("Error con la conexión, por favor intente descargar de nuevo");
-      });;
+      });
 
+	  fileTransfer.onProgress(progress => {
+		const progreso = Math.round(100 *progress.loaded / progress.total);
+		console.log("progreso:",progreso)
+	  });
     });
   }
 

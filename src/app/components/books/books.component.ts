@@ -180,7 +180,7 @@ export class BooksComponent implements OnInit {
   
 
  async ngOnDestroy(){
-	 this.msnry.destroy();
+	 //this.msnry.destroy();
     if(this.subscribeBooks != undefined)	
       await this.subscribeBooks.unsubscribe();
   }

@@ -139,4 +139,5 @@
     <plugin name="onesignal-cordova-plugin" spec="^3.0.1" />
     <engine name="browser" spec="6.0.0" />
     <engine name="ios" spec="^4.5.5" />
+    <engine name="android" spec="8.1.0" />
 </widget>
