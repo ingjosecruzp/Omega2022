@@ -47,6 +47,7 @@ import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ng
 import { ActPortadasService } from 'src/app/services/act-portadas.service';
 import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { apiBase } from 'src/app/api/apiBase';
+import { ThemeSwitcherService } from 'src/app/services/theme-switcher.service';
 
 
 
@@ -169,7 +170,7 @@ export class HomeDirectorPage {
               private globalServicies: GlobalService,private apiDevice: DevicesService,private pushService:PushService,
               private apiPortadas: PortadasService,private transfer: FileTransfer,private file: File,private zip: Zip,
               private actPortadasService: ActPortadasService, private webview: WebView, private api: apiBase,
-              private cdRef : ChangeDetectorRef) {
+              private cdRef : ChangeDetectorRef,public themeSwitcher: ThemeSwitcherService) {
     //  this.scrollenable = true;
 
 
@@ -635,7 +636,14 @@ export class HomeDirectorPage {
 
    this.changeSVG();
      // set status bar to white
-      this.statusBar.backgroundColorByHexString('#6228cf');
+      //this.statusBar.backgroundColorByHexString('#6228cf');
+      this.themeSwitcher.themeSwitch().then((data) => {
+        console.log("home principal");
+        console.log(this.themeSwitcher.principalColor);
+        this.statusBar.backgroundColorByHexString(this.themeSwitcher.principalColor);
+      }).catch((err) => {
+        
+      });
       this.selectSeccion = 1;
     //  this.statusBar.hide();
 
@@ -658,7 +666,13 @@ export class HomeDirectorPage {
       setTimeout(() => {
         if(!this.platform.is("ipad") || !this.platform.is("iphone") || !this.platform.is("ios")){
           this.statusBar.show();
-          this.statusBar.backgroundColorByHexString('#6228cf');
+          this.themeSwitcher.themeSwitch().then((data) => {
+            console.log("home principal");
+            console.log(this.themeSwitcher.principalColor);
+            this.statusBar.backgroundColorByHexString(this.themeSwitcher.principalColor);
+          }).catch((err) => {
+            
+          });
        }
        else{
         this.statusBar.hide();
@@ -839,7 +853,13 @@ export class HomeDirectorPage {
 
     async ngOnInit() {
       this.subscribeToEvents();
-
+      this.themeSwitcher.themeSwitch().then((data) => {
+        console.log("home principal");
+        console.log(this.themeSwitcher.principalColor);
+          this.statusBar.backgroundColorByHexString(this.themeSwitcher.principalColor);
+        }).catch((err) => {
+          
+        }); 
       //this.LstTareas = await this.apiTareas.get().toPromise();
       
       this.iconos = ['books_icono.svg','users_icono.svg','community_icono.svg'];

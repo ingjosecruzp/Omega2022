@@ -22,13 +22,11 @@ export class ActPortadasService {
   loading: any = undefined;
   promisesDescargas = [];
   libros: any[]=[];
-  fileTransfer: FileTransferObject;
 
   constructor(public platform: Platform,private globalServicies: GlobalService,
               private transfer: FileTransfer,private file: File,private api: apiBase,private storage: Storage,
               private loadingController: LoadingController,private apiPortadas: PortadasService,private zip: Zip,
               private booksService: BooksService,private webview: WebView) {
-      this.fileTransfer = this.transfer.create();
       //this.buscarLibros("Todos");
   }
 
@@ -65,7 +63,10 @@ export class ActPortadasService {
         if(librosLocales==null) {
 
           console.info("Sin libros en data");
-          this.cargandoAnimation("Descargando portadas");
+
+          
+              this.cargandoAnimation("Descargando portadas");
+
           const data = await this.booksService.getBooksGrado().toPromise();
 
           //Aqui va descargar las portadas
@@ -255,6 +256,7 @@ export class ActPortadasService {
         return;
       }
 
+      const fileTransfer: FileTransferObject = this.transfer.create();
       const directory = this.file.dataDirectory + "covers/";
 
       //const url = isDevMode()==true ? `${this.api.url.toString().replace('https://','http://').replace('5001','5000')}/covers/`  : `${this.api.url}/covers/`;
@@ -262,7 +264,7 @@ export class ActPortadasService {
 
       if(parseInt(libro.VersionThumbnails) > parseInt(libro.VersionThumbnailsLocal)) {
 
-        this.promisesDescargas.push(this.fileTransfer.download(url + libro.RutaThumbnails, directory + libro.RutaThumbnails).then(()=>{
+        this.promisesDescargas.push(fileTransfer.download(url + libro.RutaThumbnails, directory + libro.RutaThumbnails).then(()=>{
           //console.log(libro);
           libro.VersionThumbnailsLocal = libro.VersionThumbnails;
         }).catch((err) => {
@@ -272,7 +274,7 @@ export class ActPortadasService {
         }));
 
         //Descarga los circulos
-        this.promisesDescargas.push(this.fileTransfer.download(`${url}iconos/${libro.NombreArchivo}.svg`, `${directory}iconos/${libro.NombreArchivo}.svg`).then(()=>{
+        this.promisesDescargas.push(fileTransfer.download(`${url}iconos/${libro.NombreArchivo}.svg`, `${directory}iconos/${libro.NombreArchivo}.svg`).then(()=>{
           //console.log(libro);
           libro.VersionThumbnailsLocal = libro.VersionThumbnails;
         }).catch((err) => {
@@ -401,12 +403,6 @@ export class ActPortadasService {
       const fileTransfer: FileTransferObject = this.transfer.create();
       const nameFile ='covers.zip';
       const directory = this.file.dataDirectory;
-
-	  console.log("//Inicia Descarga Portadas");
-	  console.log(url);
-	  console.log(directory);
-	  console.log(nameFile);
-	  console.log(directory + nameFile);
 	
       fileTransfer.download(url, directory + nameFile).catch(entry =>{
         console.log("//Portadas Descargadas");
@@ -428,10 +424,10 @@ export class ActPortadasService {
         reject("Error con la conexión, por favor intente descargar de nuevo");
       });
 
-	  fileTransfer.onProgress(progress => {
-		const progreso = Math.round(100 *progress.loaded / progress.total);
-		console.log("progreso:",progreso)
-	  });
+      /*fileTransfer.onProgress(progress => {
+        const progreso = Math.round(100 *progress.loaded / progress.total);
+        console.log("progreso:",progreso)
+      });*/
     });
   }
 

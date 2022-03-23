@@ -248,6 +248,10 @@ ion-spinner {
         width: 44%;
         height: auto;
         //flex: 0 1 25%;
+        
+        .image-rouder{
+            height: calc((325px/2)/var(--aspectRatio));
+        }
     }
     .stylecategorias {
         padding-bottom: 0px;
@@ -324,6 +328,9 @@ ion-spinner {
         width: 44%;
         height: auto;
         //flex: 0 1 25%;
+        .image-rouder{
+            height: calc((428px/2)/var(--aspectRatio));
+        }
     }
     .stylecategorias {
         padding-bottom: 0px;
@@ -400,6 +407,9 @@ ion-spinner {
         width: 29%;
         height: auto;
         //flex: 0 1 25%;
+        .image-rouder{
+            height: calc((515px/2)/var(--aspectRatio));
+        }
     }
     .stylecategorias {
         padding-bottom: 0px;
@@ -476,6 +486,10 @@ ion-spinner {
         padding-bottom: 8px;
         width: 32%;
         height: auto;
+
+        .image-rouder{
+            height: calc((700px/3)/var(--aspectRatio));
+        }
     }
     .grid-item {
         text-align: center;
@@ -607,6 +621,10 @@ ion-spinner {
         padding-bottom: 8px;
         width: 24%;
         height: auto;
+
+        .image-rouder{
+            height: calc((1024px/4)/var(--aspectRatio));
+        }
     }
     .stylecategorias {
         padding-bottom: 20px;
