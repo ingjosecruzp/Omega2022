@@ -63,8 +63,8 @@ export class ActPortadasService {
         if(librosLocales==null) {
 
           console.info("Sin libros en data");
-
           
+          if(this.platform.is('cordova'))
               this.cargandoAnimation("Descargando portadas");
 
           const data = await this.booksService.getBooksGrado().toPromise();
@@ -403,10 +403,11 @@ export class ActPortadasService {
       const fileTransfer: FileTransferObject = this.transfer.create();
       const nameFile ='covers.zip';
       const directory = this.file.dataDirectory;
+
+      console.log("//Inicia Descarga Portadas");
 	
-      fileTransfer.download(url, directory + nameFile).catch(entry =>{
+      fileTransfer.download(url, directory + nameFile).then(entry =>{
         console.log("//Portadas Descargadas");
-        
         return this.zip.unzip(entry.toURL(), directory + 'covers');
       }).then(result => {
         console.log("//Portadas Descompromido");
@@ -439,7 +440,7 @@ export class ActPortadasService {
 
           const nameFile ='covers.zip';
           const directory = this.file.dataDirectory;
-          
+
           //Descarga libro
           fileTransfer.download(url + versionDevice, directory + nameFile).then(entry => {
 
