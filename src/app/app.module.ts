@@ -55,7 +55,7 @@ import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
     IonicModule.forRoot({mode:'ios', scrollPadding:false,scrollAssist:true}),
     IonicStorageModule.forRoot({
       name: '__books',
-      driverOrder: ['indexeddb','sqlite','websql']
+      driverOrder: ['sqlite','indexeddb','websql']
     }), 
     HttpClientModule,
     ReactiveFormsModule,
