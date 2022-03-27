@@ -150,7 +150,7 @@ export class HomeDirectorPage {
     campus : ''
   };
   slideOpts = {
-    loop: false,
+    loop: true,
   };
   slideOptsdos = {
     autoHeight: true
