@@ -718,8 +718,10 @@ export class HomeDirectorPage {
         this.tabs = ['Todos', 'Inglés'  , 'Español'];
 
         //this.pildora = 'Todos';
+        this.renderer.setStyle(this.fabend.nativeElement,'display','none');
       }  else if (index === 2) {
         
+        this.renderer.setStyle(this.fabend.nativeElement,'display','none');
         setTimeout(() => {
           //Esta validacion es para que no se dibujen dos veces los componentes de escolaridad
           if(this.container._data.renderElement.nextElementSibling==null) {
