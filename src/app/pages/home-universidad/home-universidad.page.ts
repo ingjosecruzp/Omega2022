@@ -136,6 +136,7 @@ export class HomeUniversidadPage implements OnInit {
 
   @ViewChild('content2', {read: ElementRef, static: true}) contentref2: ElementRef;
   @ViewChild('div2', {read: ElementRef, static: true}) div2: ElementRef;
+  @ViewChild('divOverlaySombra', {read: ElementRef, static: true}) divOverlaySombra: ElementRef;
   @ViewChild('footer', {read: ElementRef, static: true}) footer: ElementRef;
   @ViewChild('fab', {read: ElementRef, static: true}) fab: ElementRef;
   @ViewChild('fabstart', {read: ElementRef, static: true}) fabstart: ElementRef;
@@ -159,7 +160,7 @@ export class HomeUniversidadPage implements OnInit {
   @ViewChild('avatarUser', {read: ElementRef, static: false}) avatarUser: ElementRef;
   @ViewChild('mobi', {static: false}) mobi: MbscCalendar; 
   @ViewChild('filtrosControl', {static: false}) filtrosControl: IonSelect;
-  @ViewChild('tituloCategoria', {read: ElementRef,static: false}) tituloCategoria: ElementRef;
+
 
   public fabVisible: boolean = true;
   public fabVisibleFilters: boolean = false;
@@ -285,7 +286,7 @@ export class HomeUniversidadPage implements OnInit {
    { offset: 0.5, transform: 'scale(1.3)' },
    { offset: 1, transform: 'scale(1)' }, ]);
 
-      animation7 = this.animationCtrl.create('identifier7-a')
+    animation7 = this.animationCtrl.create('identifier7-a')
    .addElement(this.animation7.nativeElement)
    .duration(300)
    .delay(50)
@@ -436,9 +437,9 @@ export class HomeUniversidadPage implements OnInit {
       animation3.play();
   //    animation4.play();
    //   animation5.play();
-      animation6.play();
-      animation7.play();
-      animation8.play();
+     animation6.play();
+     animation7.play();
+     animation8.play();
      animation9.play();
      animation10.play();
   
@@ -477,9 +478,10 @@ export class HomeUniversidadPage implements OnInit {
   mover() {
     
     if (this.pocisionInicial) {
+      console.log("animacionMover")
     this.animacion(true, false);
     const animation5: Animation = this.animationCtrl.create('bouceEduardohome')
-    .addElement(this.div2.nativeElement)
+    .addElement([this.div2.nativeElement,this.divOverlaySombra.nativeElement])
     .duration(350)
     .delay(0)
     .easing(' cubic-bezier(0.61, 1, 0.88, 1)')
@@ -494,9 +496,6 @@ export class HomeUniversidadPage implements OnInit {
   
     animation5.play();
     this.animacionButonSlide(false);
-    setTimeout(() => {
-      this.renderer.setStyle(this.tituloCategoria.nativeElement, 'z-index', `1`);
-    }, 250);
   } else {
     this.div2.nativeElement.click();
     this.IonContentScroll.scrollToPoint(0, 0, 400);
@@ -552,7 +551,7 @@ else{
 }
 if (esHaciaArriba) {
 const animation5: Animation = this.animationCtrl.create('bouceEduardo-b')
-    .addElement(this.div2.nativeElement)
+    .addElement([this.div2.nativeElement,this.divOverlaySombra.nativeElement])
     .duration(600)	
     .delay(10)	
     //para android .easing('cubic-bezier(0,.70,.45,1)')	
@@ -589,7 +588,7 @@ this.pillMenu.animacion();
     } else {
      // this.scrollenable=false;
       const animation5: Animation = this.animationCtrl.create('bouceEduardo-c')
-  .addElement(this.div2.nativeElement)
+  .addElement([this.div2.nativeElement, this.divOverlaySombra.nativeElement])
   .duration(350)
   .delay(0)
   .easing(' cubic-bezier(0.61, 1, 0.88, 1)')
@@ -690,7 +689,6 @@ this.pillMenu.animacion();
       this.pillMenu.visibleFab(false);
 
       this.observer = new IntersectionObserver((entries) => {
-
         entries.forEach((entry: any) => {
           if (!entry.isIntersecting) {
             this.pocisionInicial = false;
@@ -925,7 +923,7 @@ this.pillMenu.animacion();
           //  this.renderer.setStyle(this.div2.nativeElement, 'transition', `none`);
         },
         onMove: (detail) => {
-        
+          console.log("onmoveGesture2")
           if (detail.velocityY < -0.50) {
             this.swipeUp = true;
             //console.log("onmoveUp");
@@ -945,7 +943,6 @@ this.pillMenu.animacion();
             if (this.swipeUp === true && !this.estadoArriba) {
               
               this.divArriba();
-              this.renderer.setStyle(this.tituloCategoria.nativeElement, 'z-index', `0`);
         /*     this.swipeUp = true;
              this.animacion(false, true);
              this.div2.nativeElement.click();
@@ -996,7 +993,7 @@ this.pillMenu.animacion();
           //  this.renderer.setStyle(this.div2.nativeElement, 'transition', `none`);
         },
         onMove: (detail) => {
-        
+          
           if (detail.velocityY < -0.50) {
             this.swipeUp2 = true;
             //console.log("onmoveUp");
@@ -1036,9 +1033,6 @@ this.pillMenu.animacion();
               if ((this.swipeDown2 === true && this.estadoArriba)&& this.swipeUp2=== false) {
                 console.log("this.swipeDown2 === true && this.estadoArriba)&& this.swipeUp2=== false down");
                 this.divAbajo();
-                setTimeout(() => {
-                  this.renderer.setStyle(this.tituloCategoria.nativeElement, 'z-index', `1`);
-                }, 250);
              /*  this.gesture.enable(true);	
 
                this.gesture.enable(true);
@@ -1755,8 +1749,7 @@ this.pillMenu.animacion();
   
     if (!this.estadoArriba){	
       setTimeout(() => {	
-        this.divArriba();
-        this.renderer.setStyle(this.tituloCategoria.nativeElement, 'z-index', `0`);	 	
+        this.divArriba();	
       }, 200);	
         
     } 	

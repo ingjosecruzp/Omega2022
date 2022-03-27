@@ -25,6 +25,7 @@ import { element } from 'protractor';
 
 
 
+
 @Component({
   selector: 'app-books',
   templateUrl: './books.component.html',
@@ -38,8 +39,11 @@ export class BooksComponent implements OnInit {
   dataList = [];
   pageNumber: number = 1;
   banderaImagen = 1;
-  totalXPagina = 10;
+  totalXPagina = 500;
   imgLoad;
+  dysplayProgres="none";
+  banderaInterseccion=1;
+  private observer: IntersectionObserver;
   //private  BackgroundGeolocation: modusecho;
   @ViewChildren(CircleProgressComponent) ArrayCircleProgress: QueryList<CircleProgressComponent>;
   @ViewChild('panelKinder', {read: ElementRef, static: false}) panelKinder: ElementRef;
@@ -55,6 +59,9 @@ export class BooksComponent implements OnInit {
   @ViewChild('botonPreparatoria', {read: ElementRef, static: false}) botonPreparatoria: ElementRef;
 
   @ViewChildren('imgMansory', {read: ElementRef}) imgMansory: QueryList<ElementRef>;
+
+  @ViewChild('interactionObserveCircle', {read: ElementRef, static: false}) interactionObserveCircle: ElementRef;
+  @ViewChild('imgMansoryContariner', {read: ElementRef, static: false}) imgMansoryContariner: ElementRef;
 
   @Input() idiomaIN: string;
   @Input() librosIN: any[];
@@ -195,7 +202,32 @@ export class BooksComponent implements OnInit {
     setTimeout(() => {
         
       this.imgMansory.changes.subscribe(element => {
-
+        this.cargarMansoryPrimeraVez(null);
+        console.log("changeMansory")
+        this.observer = new IntersectionObserver((entries) => {
+          /*   if(this.banderaInterseccion==1)
+             {
+               this.banderaInterseccion++;
+               return;
+             }*/
+             entries.forEach((entry: any) => {
+               if (entry.isIntersecting) {
+                  // this.renderer.setStyle(entry.target.firstChild.firstChild.nextElementSibling,"display",'block');
+                  //console.log("se Ve")
+                  this.renderer.setStyle(entry.target.firstChild.nextElementSibling,"display",'block');
+               } else {
+                 //console.log("no se Ve")
+                 this.renderer.setStyle(entry.target.firstChild.nextElementSibling,"display",'none');
+               }
+             });
+          }, { rootMargin : "200px"});
+     
+          this.imgMansory.toArray().forEach(item =>{
+           //this.imgMansory.toArray().forEach(item =>{
+             //console.log(item.nativeElement);
+             this.observer.observe(item.nativeElement);
+           });  
+          
         if((this.pageNumber-1)==1) return;
 
         let paginaActual = (this.pageNumber-2) * this.totalXPagina;
@@ -203,9 +235,17 @@ export class BooksComponent implements OnInit {
             const indexMansory = paginaActual + index;
             this.msnry.appended(this.imgMansory.toArray()[indexMansory].nativeElement);
         });
+        
       });
+      
+
 
     }, 100);
+
+     setTimeout(() => {
+      
+       
+     }, 3000);
 
   }
 

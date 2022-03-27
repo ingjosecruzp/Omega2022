@@ -115,9 +115,10 @@ top: 0;" mode="ios">
     font-weight: 500;
     text-align: left;
     box-sizing: border-box;
-    pointer-events: none;
     color: var(--ion-color-principal-gradoUsuario);
-    z-index: 5;
+    pointer-events: none;
+    touch-action: none;
+    z-index: 2;
     /* letter-spacing: 3px;*/">
     {{user.grado}}</ion-title>
 <ion-icon #animation8 style="color: var(--ion-color-principal-iconoCategoria);
@@ -133,10 +134,11 @@ top: 0;" mode="ios">
     text-align: left;
     box-sizing: border-box;
     pointer-events: none;
-    z-index: 5;" [src]="nombreIcono"></ion-icon>
+    touch-action: none;
+    z-index: 2;" [src]="nombreIcono"></ion-icon>
 
 
-<ion-title #tituloCategoria mode="ios" style="left: 0px;
+<ion-title mode="ios" style="left: 0px;
     top: 0px;
     padding-left: 30px;
     padding-right: 90px;
@@ -151,7 +153,8 @@ top: 0;" mode="ios">
     text-align: left;
     box-sizing: border-box;
     pointer-events: none;
-    z-index: 5;
+    touch-action: none;
+    z-index: 2;
     color: var(--ion-color-principal-tituloCategoria);
     letter-spacing: 0px;">{{header}}</ion-title>
 
@@ -239,8 +242,8 @@ top: 0;" mode="ios">
     </ion-fab-button>
 </ion-fab>
 <!-- Termina botones para escritorio -->
-
-<div #div2 (click)="clickDiv()" class="edu1" style="transform: translateY(60vh);box-shadow:0px -14px 38px 0px rgb(var(--ion-color-principal-sombra));">
+<div #divOverlaySombra class="edu1" style="transform: translateY(60vh);box-shadow:0px -14px 38px 0px rgb(var(--ion-color-principal-sombra));z-index:1 ;"></div>
+<div #div2 (click)="clickDiv()" class="edu1" style="transform: translateY(60vh);z-index: 5">
     <div style="position: -webkit-sticky;top: 0;font-size: 29px;z-index: 999;position: sticky;">
 
         <app-pill-menu (click)="test()" #pillMenu [itemsMenu]="tabs" [selectOption]="selectOption" (indicatorChanged)="segmentChanged($event)" (clickFab)="nuevoRecurso($event)" (clickFiltro)="openPicker()"></app-pill-menu>

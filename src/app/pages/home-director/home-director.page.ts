@@ -99,6 +99,7 @@ export class HomeDirectorPage {
   @ViewChild('pillMenu', {static: false}) pillMenu: PillMenuComponent;
   @ViewChild('content2', {read: ElementRef, static: true}) contentref2: ElementRef;
   @ViewChild('div2', {read: ElementRef, static: true}) div2: ElementRef;
+  @ViewChild('divOverlaySombra', {read: ElementRef, static: true}) divOverlaySombra: ElementRef;
   @ViewChild('footer', {read: ElementRef, static: true}) footer: ElementRef;
   @ViewChild('fab', {read: ElementRef, static: true}) fab: ElementRef;
   @ViewChild('fabstart', {read: ElementRef, static: true}) fabstart: ElementRef;
@@ -118,7 +119,6 @@ export class HomeDirectorPage {
   @ViewChild('booksComponentEspanol', {static: false}) booksComponentEspanol: BooksComponent;
   @ViewChild('avatarUser', {read: ElementRef, static: false}) avatarUser: ElementRef;
   @ViewChild('mobi', {static: false}) mobi: MbscCalendar; 
-  @ViewChild('tituloCategoria', {read: ElementRef,static: false}) tituloCategoria: ElementRef;
   @ViewChild('fondo1', {static: false}) fondo1: ElementRef;
   @ViewChild('fondo2', {static: false}) fondo2: ElementRef;
   @ViewChild('fondo3', {static: false}) fondo3: ElementRef;
@@ -440,7 +440,7 @@ export class HomeDirectorPage {
     if (this.pocisionInicial) {
     this.animacion(true, false);
     const animation5: Animation = this.animationCtrl.create('bouceEduardohome')
-    .addElement(this.div2.nativeElement)
+    .addElement([this.div2.nativeElement,this.divOverlaySombra.nativeElement])
     .duration(350)
     .delay(0)
     .easing(' cubic-bezier(0.61, 1, 0.88, 1)')
@@ -455,9 +455,6 @@ export class HomeDirectorPage {
   
     animation5.play();
     this.animacionButonSlide(false);
-    setTimeout(() => {
-      this.renderer.setStyle(this.tituloCategoria.nativeElement, 'z-index', `1`);
-    }, 250);
   } else {
     
     this.div2.nativeElement.click();
@@ -514,7 +511,7 @@ export class HomeDirectorPage {
   }
   if (esHaciaArriba) {
   const animation5: Animation = this.animationCtrl.create('bouceEduardo-b')
-    .addElement(this.div2.nativeElement)
+    .addElement([this.div2.nativeElement,this.divOverlaySombra.nativeElement])
     .duration(600)	
     .delay(10)	
   
@@ -552,7 +549,7 @@ export class HomeDirectorPage {
     } else {
       // this.scrollenable=false;
       const animation5: Animation = this.animationCtrl.create('bouceEduardo-c')
-  .addElement(this.div2.nativeElement)
+  .addElement([this.div2.nativeElement,this.divOverlaySombra.nativeElement])
   .duration(350)
   .delay(0)
   .easing(' cubic-bezier(0.61, 1, 0.88, 1)')
@@ -905,9 +902,6 @@ export class HomeDirectorPage {
             if (this.swipeUp === true && !this.estadoArriba) {
               
               this.divArriba();
-              this.renderer.setStyle(this.tituloCategoria.nativeElement, 'z-index', `0`);
-
-
            } else {
               
               if (this.swipeDown === true && this.estadoArriba) {
@@ -978,11 +972,7 @@ export class HomeDirectorPage {
               if ((this.swipeDown2 === true && this.estadoArriba)&& this.swipeUp2=== false) {
                 console.log("this.swipeDown2 === true && this.estadoArriba)&& this.swipeUp2=== false down00");
                 this.divAbajo();
-                setTimeout(() => {
-                  this.renderer.setStyle(this.tituloCategoria.nativeElement, 'z-index', `1`);
-                }, 250);
-                
-                
+
              /*  this.gesture.enable(true);	
 
                this.gesture.enable(true);
@@ -1244,7 +1234,6 @@ export class HomeDirectorPage {
     if (!this.estadoArriba){	
       setTimeout(() => {	
         this.divArriba(); 
-        this.renderer.setStyle(this.tituloCategoria.nativeElement, 'z-index', `0`);	 		
       }, 200);	
         
     } 	

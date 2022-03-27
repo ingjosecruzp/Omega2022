@@ -7,18 +7,19 @@
 
 
     <form [formGroup]="FrmLogin" (ngSubmit)="loginUser()">
-        <ion-grid style="position:absolute;top: 5%;width: 100%;">
-            <ion-row color="primary" class="ion-justify-content-center" style="padding-top: 63px;">
-                <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
+        <p>
+            <ion-grid style="position:absolute;top: 5%;width: 100%;">
+                <ion-row color="primary" class="ion-justify-content-center" style="padding-top: 63px;">
+                    <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
 
-                    <div class="ion-padding">
+                        <div class="ion-padding">
 
-                        <ion-item style="--background:#6228cf;overflow: visible;" lines="none">
+                            <ion-item style="--background:#6228cf;overflow: visible;" lines="none">
 
-                            <div style="font-size: 54px;padding: 10px;
+                                <div style="font-size: 54px;padding: 10px;
                             margin: auto;" class="divSimulacionIcono">
-                                <div class="divSimulacionIconoInner">
-                                    <!-- <svg class="divSimulacionIconoInner" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 76.66 83" style="enable-background:new 0 0 76.66 83;" xml:space="preserve">
+                                    <div class="divSimulacionIconoInner">
+                                        <!-- <svg class="divSimulacionIconoInner" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 76.66 83" style="enable-background:new 0 0 76.66 83;" xml:space="preserve">
                                         <style type="text/css">
                                             .st1{fill:#FFFFFF;}
                                         </style>
@@ -36,42 +37,32 @@
                                             </g>
                                         </g>
                                     </svg>-->
-                                    <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 43.98 43.98" style="enable-background:new 0 0 43.98 43.98;" xml:space="preserve">
-    <style type="text/css">
-        .st099{fill:#8128CF;}
-        .st199{fill:#FFFFFF;}
-        .st299{fill:#FF437D;}
-        .st399{fill:#00B6BA;}
-        .st499{fill:#FFC100;}
-    </style>
-    <rect class="st099" width="21.99" height="21.99"/>
-    <path class="st199" d="M6.18,4.23h3.48v10.26h6.14v3.27H6.18V4.23z"/>
-    <rect x="21.99" class="st299" width="21.99" height="21.99"/>
-    <path class="st199" d="M27.69,4.23h5.53c2.74,0,4.77,1.56,4.77,3.88c0,1.56-1.08,2.36-1.98,2.76c1.31,0.38,2.28,1.41,2.28,3.02
-        c0,2.05-1.52,3.86-4.79,3.86h-5.8V4.23z M31.17,7.29v2.26h1.73c0.89,0,1.46-0.44,1.46-1.14c0-0.68-0.57-1.12-1.46-1.12L31.17,7.29
-        L31.17,7.29z M31.17,12.38v2.32h2c0.89,0,1.46-0.46,1.46-1.18c0-0.7-0.57-1.14-1.46-1.14H31.17z"/>
-    <rect y="21.99" class="st399" width="21.99" height="21.99"/>
-    <path class="st199" d="M14.08,30.74c-0.59-0.84-1.65-1.56-2.95-1.56c-0.87,0-1.29,0.34-1.29,0.82c0,1.75,6.61,0.95,6.61,5.68
-        c0,2.51-2.22,4.39-5.4,4.39c-3.06,0-4.64-1.2-5.49-2.53l2.47-2.32c0.78,1.08,1.84,1.58,3.08,1.58c1.06,0,1.6-0.34,1.6-0.97
-        c0-1.84-6.61-0.97-6.61-5.74c0-2.43,2.17-4.18,5.17-4.18c2.34,0,4.16,1.01,5.17,2.47L14.08,30.74z"/>
-    <rect x="21.99" y="21.99" class="st499" width="21.99" height="21.99"/>
-    <path class="st199" d="M37.99,30.96H36.1c-0.88-0.15-1.06-0.97-1.09-1.26v-1.72c0-1.12-0.91-2.03-2.03-2.03
-        c-1.12,0-2.03,0.91-2.03,2.03v1.99c-0.16,0.7-0.76,0.92-1.1,0.99h-1.87c-1.12,0-2.03,0.91-2.03,2.03c0,1.12,0.91,2.03,2.03,2.03h1.9
-        c0.73,0.11,0.99,0.68,1.07,1.04v1.93c0,1.12,0.91,2.03,2.03,2.03c1.12,0,2.03-0.91,2.03-2.03v-1.68c0.03-0.97,0.78-1.23,1.16-1.3
-        h1.82c1.12,0,2.03-0.91,2.03-2.03C40.02,31.87,39.11,30.96,37.99,30.96z"/>
-    </svg>
+                                        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32.4 35.1" style="enable-background:new 0 0 32.4 35.1;" xml:space="preserve">
+                               <style type="text/css">
+                                   .st100{fill:#FFFFFF;}
+                               </style>
+                               <g>
+                                   <path class="st100" d="M32.4,10.6c0-1.7-1-2.9-2.5-3.3c0,0,0,0,0,0c1-0.4,2.1-1.3,2.1-3c0-2.5-2.2-4.2-5.2-4.2h-9.1v14.8h9.4
+                                       C30.8,14.8,32.4,12.8,32.4,10.6z"/>
+                                   <path class="st100" d="M6.3,19.6c-3.3,0-5.7,1.9-5.7,4.6c0,2.5,1.6,3.6,3.3,4.2c0,0,0,0,0,0L0,32.3c0.9,1.5,2.7,2.8,6,2.8
+                                       c3.5,0,5.9-2.1,5.9-4.8c0-2.6-1.8-3.7-3.6-4.3c0,0,0,0,0,0l3.6-3.6C10.8,20.7,8.8,19.6,6.3,19.6z"/>
+                                   <polygon class="st100" points="9.7,0 4.5,0 3.1,0 0.7,0 0.7,14.8 3.7,14.8 11.2,14.8 11.2,14.8 12,14.8 12,7.3 9.7,7.3 	"/>
+                                   <polygon class="st100" points="27.7,20.6 20.5,20.6 20.5,24.1 17.1,24.1 17.1,31.2 20.5,31.2 20.5,34.7 27.7,34.7 27.7,31.2 
+                                       31.1,31.2 31.1,24.1 27.7,24.1 	"/>
+                               </g>
+                               </svg>
 
+                                    </div>
                                 </div>
-                            </div>
-                        </ion-item>
-                    </div>
-                    <!-- <div class="ion-padding">
+                            </ion-item>
+                        </div>
+                        <!-- <div class="ion-padding">
                         <ion-button size="large" type="submit" expand="block">Entrar</ion-button>
                     </div>-->
-                </ion-col>
-            </ion-row>
-        </ion-grid>
-
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </p>
 
         <p>
             <ion-grid class="ion-justify-content-center" style="position:absolute;top: 31vh;width: 100%;">
@@ -218,10 +209,6 @@
                             </ion-item>
 
                         </div>
-
-                        <!-- <div class="ion-padding">
-                        <ion-button size="large" type="submit" expand="block">Entrar</ion-button>
-                    </div>-->
                     </ion-col>
                 </ion-row>
             </ion-grid>
