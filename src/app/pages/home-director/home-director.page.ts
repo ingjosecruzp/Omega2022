@@ -1009,7 +1009,7 @@ export class HomeDirectorPage {
            this.loadingController.dismiss();
         }
 
-        //this.changeSVG();
+        this.changeSVG();
      }
      catch(error) {
        alert(error);
