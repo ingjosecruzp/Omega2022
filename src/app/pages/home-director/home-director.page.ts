@@ -150,7 +150,7 @@ export class HomeDirectorPage {
     campus : ''
   };
   slideOpts = {
-    loop: true,
+    loop: false,
   };
   slideOptsdos = {
     autoHeight: true
@@ -603,11 +603,11 @@ export class HomeDirectorPage {
          let swiper = await this.slideUp.getSwiper();
 
          //Actualiza las diaposrtivas duplicadas
-         setTimeout(()=>{
+         /*setTimeout(()=>{
              swiper.loopDestroy();
              swiper.loopCreate();
              console.log('reborn!')
-         },2000);
+         },2000);*/
         });
       }, 100);
  
