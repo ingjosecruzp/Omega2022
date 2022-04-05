@@ -17,6 +17,7 @@ export class VideosComponent implements OnInit {
   
   tipoArchivoMostrar:string;
   showDatos: boolean = false;
+  tipoEntrada: string = 'left-entrance';
 
   //Variable de prueba
   materias: any[] = [ 

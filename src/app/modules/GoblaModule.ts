@@ -26,6 +26,10 @@ import { PerfilComponent } from '../components/perfil/perfil.component';
 import { ReportComponent } from '../components/report/report.component';
 import { ListExamenesComponent } from '../components/list-examenes/list-examenes.component';
 import { BindCssVariableDirective } from '../directives/bind-css-variable.directive';
+import { FavoritosComponent } from '../components/biblioteca/favoritos/favoritos.component';
+import { MostrarArchivosComponent } from '../components/biblioteca/mostrar-archivos/mostrar-archivos.component';
+import { ListBibliotecaComponent } from '../components/biblioteca/list-biblioteca/list-biblioteca.component';
+import { VideosComponent } from '../components/biblioteca/videos/videos.component';
 
 @NgModule({
     imports: [
@@ -35,10 +39,10 @@ import { BindCssVariableDirective } from '../directives/bind-css-variable.direct
     ],
     declarations:[PillMenuComponent,CircleProgressComponent,CodesComponent,BooksComponent,FilterPipe,CircleProgressReportComponent,ChatsComponent,NewsComponent,LinkifyPipe,SortByPipe,SanitizePipe,MensajeAdeudoComponent,MensajeInternetComponent,ListResourceComponent,
                   ForumComponent,GraphicsComponent,EvidencesComponent,SubjectsComponent,QuestionsComponent,ContactComponent,
-                  PerfilComponent,ReportComponent,ListExamenesComponent,BindCssVariableDirective],
+                  PerfilComponent,ReportComponent,ListExamenesComponent,BindCssVariableDirective,FavoritosComponent,MostrarArchivosComponent,ListBibliotecaComponent,VideosComponent],
     exports:[PillMenuComponent,CircleProgressComponent,CodesComponent,BooksComponent,FilterPipe,CircleProgressReportComponent,ChatsComponent,NewsComponent,LinkifyPipe,SortByPipe,SanitizePipe,MensajeAdeudoComponent,MensajeInternetComponent,ListResourceComponent,
              ForumComponent,GraphicsComponent,EvidencesComponent,SubjectsComponent,QuestionsComponent,ContactComponent,
-             PerfilComponent,ReportComponent,ListExamenesComponent,BindCssVariableDirective]
+             PerfilComponent,ReportComponent,ListExamenesComponent,BindCssVariableDirective,FavoritosComponent,MostrarArchivosComponent,ListBibliotecaComponent,VideosComponent]
 })
 export class GlobalModule
 {

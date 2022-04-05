@@ -84,9 +84,13 @@ export class WebsocketService {
   }
 
   public finishWebScoket(): void {
-    this.closedConnection = true;
-    this._hubConnection.stop();
-    this._hubConnection = undefined;
+    try {
+      this.closedConnection = true;
+      this._hubConnection.stop();
+      this._hubConnection = undefined; 
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   private registerOnServerEvents(): void {

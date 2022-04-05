@@ -364,9 +364,12 @@ export class BooksComponent implements OnInit {
 
     if (this.platform.is('cordova')) {
         this.verificarLibro(item);
-    } else {      
+    } else {    
+      const date = new Date();
+      const timestamp = date.getTime();
+
       item.status="terminado";
-      window.open('https://desktop.alfalbs.app/books/' + item.NombreArchivo + '/index.html');
+      window.open('https://desktop.alfalbs.app/books/' + item.NombreArchivo + '/index.html?t=' + timestamp);
       //window.open('../books/' + item.NombreArchivo + '/index.html');
     }
   }

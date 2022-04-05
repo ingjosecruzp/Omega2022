@@ -26,6 +26,7 @@ export class FavoritosComponent implements OnInit {
 	cargandoSpinner: boolean = false;
 	noResults: boolean = false;
 	searchActive: boolean = false;
+	spinnerLoad : boolean = true;
 
 	errorData: any[] = [];
 	errorPresent: boolean = false;
