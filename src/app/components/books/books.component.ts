@@ -250,12 +250,6 @@ export class BooksComponent implements OnInit {
   }
 
     
-
-
-  
-
-
-
   iniciarValidacion() {
     const directory = this.file.dataDirectory + "books2020/";
     
@@ -433,10 +427,8 @@ export class BooksComponent implements OnInit {
           /*if(item.descargado=="no")
               throw new Error("El libro no esta descargado");*/
               
-
           resolve("ok");
       }).catch(err => {
-
           item.spinner="block";
 
           if(item.descargado=="si"){

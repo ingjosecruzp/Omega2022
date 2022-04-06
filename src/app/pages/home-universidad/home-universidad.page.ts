@@ -1852,20 +1852,21 @@ this.pillMenu.animacion();
 
     }
 
-    animacionFlechaArriba(){
-      let animationFlechaArriba : Animation;
-
-      animationFlechaArriba= this.animationCtrl.create('animationFlechaArriba')
-      .addElement(this.fabflechaarriba.nativeElement)
-      .duration(1500)
-      .iterations(Infinity)
-      .fromTo('transform', 'translateY(0px)', 'translateY(-70px)')
-      .fromTo('opacity', '1', '0.2');
-
-      animationFlechaArriba.play();
-
-
-    }
+	animacionFlechaArriba(){
+		setTimeout(() => {
+		  let animationFlechaArriba : Animation;
+  
+		  animationFlechaArriba= this.animationCtrl.create('animationFlechaArriba')
+		  .addElement(this.fabflechaarriba.nativeElement)
+		  .duration(1500)
+		  .iterations(Infinity)
+		  .fromTo('transform', 'translateY(0px)', 'translateY(-70px)')
+		  .fromTo('opacity', '1', '0.2');
+	
+		  animationFlechaArriba.play();
+		},500);
+  
+	  }
 
     changeIonChipRecursos(data){
       this.TipoSeleccionado = data;

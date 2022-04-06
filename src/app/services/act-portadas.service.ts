@@ -187,6 +187,8 @@ export class ActPortadasService {
         libro.spinner="none";
         libro.status="pendiente";
 
+		const directory = this.file.dataDirectory + "books2020/";
+
         if(this.platform.is('cordova')) { 
 
           if(libro.RutaThumbnails.includes("?t=")){ 
@@ -221,7 +223,25 @@ export class ActPortadasService {
           libro.Icono = `${this.api.url}/covers/iconos/${libro.NombreArchivo}.svg?t=${timestamp}`;
         }
 
-        resolve('');
+		if (this.platform.is('cordova')) {
+			this.existeLibro(directory,'Libro'+ libro.Id).then(() =>{
+			  //item.opacity= 1;
+			  /*if(item.descargado=="no")
+				  throw new Error("El libro no esta descargado");*/
+	
+			   libro.descarga = "none";
+			   libro.flecha= "none";
+			   resolve('');
+			}).catch(() =>{
+			   resolve('');
+			  //item.opacity= 0.2;
+			  //item.descargado="no";
+			  //item.descarga = "block";
+			  //item.flecha= "block";
+			});
+		} else {
+			resolve('');
+		}
 
     }); 
   }
@@ -497,7 +517,7 @@ export class ActPortadasService {
     return value;
   }
 
-   connectivityInternet() {
+  connectivityInternet() {
     return new Promise(async (resolve,reject) =>{ 
 
       if (!window || !navigator || !('onLine' in navigator)) return;
@@ -506,5 +526,19 @@ export class ActPortadasService {
 
       resolve(status);
     });
+  }
+
+  existeLibro(directory,path){
+    var promise = new Promise((resolve, reject) => {
+      //this.file.checkDir(directory,path).then(_ =>{
+      //console.log(directory + path + "/");
+      this.file.checkFile(directory + path + "/","index.html").then(_ =>{
+          resolve("ok");
+      }).catch(err => {
+          reject();
+      });
+    });
+
+    return promise;
   }
 }
