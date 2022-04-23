@@ -91,7 +91,8 @@ ion-spinner {
     font-size: 15px;
     font-weight: 700;
     padding-bottom: 5px;
-    line-height: 18px;
+    line-height: 14px;
+    margin-bottom: 1px;
 }
 
 .item2 {
@@ -120,7 +121,7 @@ ion-spinner {
     grid-row: 3;
     font-size: 12px;
     font-weight: 500;
-    margin-top: -6px;
+    margin-top: 4px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -213,7 +214,7 @@ ion-spinner {
         grid-row: 3;
         font-size: 12px;
         font-weight: 500;
-        margin-top: -6px;
+        margin-top: 4px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -299,7 +300,7 @@ ion-spinner {
         grid-row: 3;
         font-size: 12px;
         font-weight: 500;
-        margin-top: -6px;
+        margin-top: 4px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -378,7 +379,7 @@ ion-spinner {
         grid-row: 3;
         font-size: 12px;
         font-weight: 500;
-        margin-top: -6px;
+        margin-top: 4px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -457,7 +458,7 @@ ion-spinner {
         grid-row: 3;
         font-size: 12px;
         font-weight: 500;
-        margin-top: -6px;
+        margin-top: 4px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -535,7 +536,7 @@ ion-spinner {
         grid-row: 3;
         font-size: 14px;
         font-weight: 500;
-        margin-top: -6px;
+        margin-top: 4px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -745,7 +746,7 @@ ion-spinner {
 .grid-itemmasonry {
     /* height: 200px;
     object-fit: cover; */
-    margin-bottom: 16px;
+    margin-bottom: 22px;
     border-radius: 16px;
     // background-color: lightgray;
 }

@@ -682,7 +682,7 @@ this.pillMenu.animacion();
          let pathFondo6 = this.webview.convertFileSrc(`${this.file.dataDirectory}covers/fondo/${escolaridad}/6.svg?t=${timestamp}`);
 
          if(pathFondo2.startsWith("undefined/") ) {
-         // pathFondo1 = pathFondo1.replace("undefined/", "http://localhost/");  
+          pathFondo1 = pathFondo1.replace("undefined/", "http://localhost/");  
           pathFondo2 = pathFondo2.replace("undefined/", "http://localhost/");  
           pathFondo3 = pathFondo3.replace("undefined/", "http://localhost/");  
           pathFondo4 = pathFondo4.replace("undefined/", "http://localhost/");  

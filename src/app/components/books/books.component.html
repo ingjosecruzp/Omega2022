@@ -21,9 +21,9 @@
                             </div>
                             {{item.Nombre}}
                         </div>
-                        <div class="grid-item item2" style="width: 30px;height: 30px;border-radius: 50%;text-align: left;">
+                        <div class="grid-item item2" style="width: 26px;height: 26px; border-radius: 50%;text-align: left;transform: translateY(2px);">
                             <ion-avatar>
-                                <img style="width: 30px;height: 30px;" loading="lazy" [src]="item.Icono | sanitizePipe: 'resourceUrl'">
+                                <img style="width: 26px;height: 26px;" loading="lazy" [src]="item.Icono | sanitizePipe: 'resourceUrl'">
                             </ion-avatar>
                         </div>
                         <!--<div class="grid-item item2" style="width: 30px;height: 30px;background-color: #6228cf; border-radius: 50%;text-align: left;">
@@ -31,7 +31,7 @@
                                         <img style="width: 30px;height: 30px;" [src]="sanitizer.bypassSecurityTrustResourceUrl(item.Icono)" >
                                     </ion-avatar>
                                 </div>-->
-                        <div class="grid-item item3">{{item.Grados}}{{item.Suffix}} Grade</div>
+                        <div class="grid-item item3" style="padding-top: 5px;">{{item.Grados}}{{item.Suffix}} Grade</div>
                         <div class="grid-item item4">{{item.Escolaridad}}</div>
                     </div>
                 </div>
@@ -59,9 +59,9 @@
                             </div>
                             {{item.Nombre}}
                         </div>
-                        <div class="grid-item item2" style="width: 30px;height: 30px; border-radius: 50%;text-align: left;">
+                        <div class="grid-item item2" style="width: 26px;height: 26px; border-radius: 50%;text-align: left;transform: translateY(2px);">
                             <ion-avatar>
-                                <img style="width: 30px;height: 30px;" loading="lazy" [src]="item.Icono | sanitizePipe: 'resourceUrl'">
+                                <img style="width: 26px;height: 26px;" loading="lazy" [src]="item.Icono | sanitizePipe: 'resourceUrl'">
                             </ion-avatar>
                         </div>
                         <!--<div class="grid-item item2" style="width: 30px;height: 30px;background-color: #6228cf; border-radius: 50%;text-align: left;">
@@ -69,7 +69,7 @@
                                         <img style="width: 30px;height: 30px;" [src]="sanitizer.bypassSecurityTrustResourceUrl(item.Icono)" >
                                     </ion-avatar>
                                 </div>-->
-                        <div class="grid-item item3">{{item.Grados}}{{item.Suffix}} Grade</div>
+                        <div class="grid-item item3" style="padding-top: 5px;">{{item.Grados}}{{item.Suffix}} Grade</div>
                         <div class="grid-item item4">{{item.Escolaridad}}</div>
                     </div>
                 </div>
@@ -97,9 +97,9 @@
                             </div>
                             {{item.Nombre}}
                         </div>
-                        <div class="grid-item item2" style="width: 30px;height: 30px; border-radius: 50%;text-align: left;">
+                        <div class="grid-item item2" style="width: 26px;height: 26px; border-radius: 50%;text-align: left;transform: translateY(2px);">
                             <ion-avatar>
-                                <img style="width: 30px;height: 30px;" loading="lazy" [src]="item.Icono | sanitizePipe: 'resourceUrl'">
+                                <img style="width: 26px;height: 26px;" loading="lazy" [src]="item.Icono | sanitizePipe: 'resourceUrl'">
                             </ion-avatar>
                         </div>
                         <!--<div class="grid-item item2" style="width: 30px;height: 30px;background-color: #6228cf; border-radius: 50%;text-align: left;">
@@ -107,7 +107,7 @@
                                         <img style="width: 30px;height: 30px;" [src]="sanitizer.bypassSecurityTrustResourceUrl(item.Icono)" >
                                     </ion-avatar>
                                 </div>-->
-                        <div class="grid-item item3">{{item.Grados}}{{item.Suffix}} Grade</div>
+                        <div class="grid-item item3" style="padding-top: 5px;">{{item.Grados}}{{item.Suffix}} Grade</div>
                         <div class="grid-item item4">{{item.Escolaridad}}</div>
                     </div>
                 </div>
@@ -135,9 +135,9 @@
                             </div>
                             {{item.Nombre}}
                         </div>
-                        <div class="grid-item item2" style="width: 30px;height: 30px; border-radius: 50%;text-align: left;">
+                        <div class="grid-item item2" style="width: 26px;height: 26px; border-radius: 50%;text-align: left;transform: translateY(2px);">
                             <ion-avatar>
-                                <img style="width: 30px;height: 30px;" loading="lazy" [src]="item.Icono | sanitizePipe: 'resourceUrl'">
+                                <img style="width: 26px;height: 26px;" loading="lazy" [src]="item.Icono | sanitizePipe: 'resourceUrl'">
                             </ion-avatar>
                         </div>
                         <!--<div class="grid-item item2" style="width: 30px;height: 30px;background-color: #6228cf; border-radius: 50%;text-align: left;">
@@ -145,7 +145,7 @@
                                         <img style="width: 30px;height: 30px;" [src]="sanitizer.bypassSecurityTrustResourceUrl(item.Icono)" >
                                     </ion-avatar>
                                 </div>-->
-                        <div class="grid-item item3">{{item.Grados}}{{item.Suffix}} Semester</div>
+                        <div class="grid-item item3" style="padding-top: 5px;">{{item.Grados}}{{item.Suffix}} Semester</div>
                         <div class="grid-item item4">{{item.Escolaridad}}</div>
                     </div>
                 </div>
@@ -160,7 +160,7 @@
 </ng-template>
 <ng-template #derechaTemplate>
 
-    <div #imgMansoryContariner class="grid-containermasonry transform">
+    <div class="grid-containermasonry transform">
 
         <div #imgMansory *ngFor="let item of dataList" class="grid-itemmasonry" appBindCssVariable="aspectRatio" [appBindCssVariableValue]="item.AspectRatio">
             <div class="skeletonImg" style="position:absolute;width: 100%;">
@@ -181,9 +181,9 @@
                         </div>
                         {{item.Nombre}}
                     </div>
-                    <div class="grid-item item2" style="width: 30px;height: 30px; border-radius: 50%;text-align: left;">
+                    <div class="grid-item item2" style="width: 26px;height: 26px; border-radius: 50%;text-align: left;transform: translateY(2px);">
                         <ion-avatar>
-                            <img style="width: 30px;height: 30px;" [src]="item.Icono | sanitizePipe: 'resourceUrl'">
+                            <img style="width: 26px;height: 26px;" [src]="item.Icono | sanitizePipe: 'resourceUrl'">
                         </ion-avatar>
                     </div>
                     <div class="grid-item item3" style="position:relative;top:1px">

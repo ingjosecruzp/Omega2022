@@ -385,6 +385,7 @@ export class ActPortadasService {
         Este servicio se utilizaba anteriormente para actulaizar todas las portadas, se dejo
         solo para actulizar los fondos
        */
+      console.log("buscarFondosTemas");
       return new Promise(async (resolve,reject) =>{ 
         const status = await this.connectivityInternet();
 

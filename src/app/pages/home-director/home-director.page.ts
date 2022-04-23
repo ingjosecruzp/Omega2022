@@ -815,7 +815,6 @@ export class HomeDirectorPage {
 
     ionViewWillEnter() {
       this.user.nombre = this.capitalizeFirstLetter(this.getKeyToken('nombre').split(' ')[0]);
-
       this.buscarFondos();
       //let nombre = this.capitalizeFirstLetter(this.user.nombre.split(' ')[0]);
       //console.log(nombre);
