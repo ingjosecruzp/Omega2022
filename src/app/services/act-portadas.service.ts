@@ -89,6 +89,13 @@ export class ActPortadasService {
           }*/
           
           this.libros = data;
+          //Si existen libro duplicados los elimina
+          this.libros = this.libros.filter((value, index, self) =>
+              index === self.findIndex((t) => (
+                t.Id === value.Id
+              ))
+          );
+          
           await this.storage.set(pathStorage,data);
 
           this.loadingController.dismiss();
@@ -145,10 +152,18 @@ export class ActPortadasService {
           if(this.promisesDescargas.length > 0) 
               await this.descargarPortadas(pathStorage);
 
+          //Si existen libro duplicados los elimina
+          this.libros = this.libros.filter((value, index, self) =>
+              index === self.findIndex((t) => (
+                t.Id === value.Id
+              ))
+          );
+
           //Ordena por grados los libros antes de ser guardados.
           await this.storage.set(pathStorage,this.libros.sort((a, b) => a.Grados.localeCompare(b.Grados)));
           
           console.log("dataLista");
+
           //return this.libros;
           if(idioma=="Todos") {
             this.procesoFinalizado.emit(this.libros);
