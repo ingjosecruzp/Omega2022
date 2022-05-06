@@ -86,7 +86,7 @@ export class ActPortadasService {
 
           /*if(this.promisesDescargas.length > 0) {
               await this.descargarPortadas(pathStorage);
-          }*/
+          }*/ 
           
           this.libros = data;
           //Si existen libro duplicados los elimina
@@ -95,7 +95,7 @@ export class ActPortadasService {
                 t.Id === value.Id
               ))
           );
-          
+
           await this.storage.set(pathStorage,data);
 
           this.loadingController.dismiss();
