@@ -426,8 +426,9 @@ export class BooksComponent implements OnInit {
       this.file.checkFile(directory + path + "/","index.html").then(_ =>{
           /*if(item.descargado=="no")
               throw new Error("El libro no esta descargado");*/
-              
-          resolve("ok");
+          console.log(item);
+		  reject();
+          //resolve("ok");
       }).catch(err => {
           item.spinner="block";
 
