@@ -426,8 +426,20 @@ export class BooksComponent implements OnInit {
       this.file.checkFile(directory + path + "/","index.html").then(_ =>{
           /*if(item.descargado=="no")
               throw new Error("El libro no esta descargado");*/
+          
+          if(item.descargado=="no") {
+            //Solicita la url de descarga
+            item.descarga = "block";
+            item.spinner="block";
+            this.booksService.getBook(item.Id).subscribe(data => {
+              this.download(data["url"],item,data["version"],"install");
+              reject();
+            },err =>{
               
-          resolve("ok");
+            });
+          } else {  
+            resolve("ok");
+          }
       }).catch(err => {
           item.spinner="block";
 
