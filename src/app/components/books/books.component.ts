@@ -418,7 +418,7 @@ export class BooksComponent implements OnInit {
     });
 
     return promise;
-  }
+  } 
 
   existeDirectorio(directory,path,item){
     var promise = new Promise((resolve, reject) => {

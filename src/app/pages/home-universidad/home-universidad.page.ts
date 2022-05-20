@@ -48,6 +48,7 @@ import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { apiBase } from 'src/app/api/apiBase';
 import { isDevMode } from '@angular/core';
 import { ActPortadasService } from '../../services/act-portadas.service';
+import { HeartbeatService } from 'src/app/api/heartbeat.service';
 
 
 mobiscroll.settings = {
@@ -208,7 +209,8 @@ export class HomeUniversidadPage implements OnInit {
               private storage: Storage,private router: Router,private globalServicies: GlobalService,
               private pushService: PushService,private apiDevice: DevicesService,private apiPortadas: PortadasService,
               private transfer: FileTransfer,private file: File,private zip: Zip,public themeSwitcher: ThemeSwitcherService,
-              private webview: WebView,private api: apiBase,private actPortadasService: ActPortadasService,private cdRef : ChangeDetectorRef ) {
+              private webview: WebView,private api: apiBase,private actPortadasService: ActPortadasService,private cdRef : ChangeDetectorRef,
+              private apiHeartbeat: HeartbeatService) {
     //  this.scrollenable = true;
 
   }
@@ -1712,8 +1714,13 @@ this.pillMenu.animacion();
             this.slideUp.lockSwipes(false);
             //this.LstTareas = await this.apiTareas.get().toPromise();
       } else {
+          this.apiHeartbeat.get().subscribe(() =>{
+            //Si tiene conexion con el servidor pero el websocket se desconecto
+          }, err => {
+            //No logro ver el servidor
             this.hayConexion = false;
             this.renderer.setStyle(this.avatarUser.nativeElement, 'color', `black`);
+          }); 
       }
     }
     public tamañoMover(): number{	
