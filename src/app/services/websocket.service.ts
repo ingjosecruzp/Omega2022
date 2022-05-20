@@ -3,6 +3,7 @@ import { HubConnection, HubConnectionBuilder, HttpTransportType } from '@aspnet/
 import { Message } from '../models/Message';
 import { apiBase } from '../api/apiBase';
 import { async } from '@angular/core/testing';
+import { HeartbeatService } from '../api/heartbeat.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class WebsocketService {
   private _hubConnection: HubConnection;
   private closedConnection = false;
 
-  constructor(private api: apiBase) {
+  constructor(private api: apiBase,private apiHeartbeat:HeartbeatService) {
 
   }
 
@@ -76,7 +77,12 @@ export class WebsocketService {
             console.log("reconectar");
             //this._hubConnection.stop();
             this.connectionIsEstablished = false;
-            this.connectionEstablished.emit(false);
+            this.apiHeartbeat.get().subscribe(() =>{
+              //Si tiene conexion con el servidor pero el websocket se desconecto
+            }, err => {
+              //No logro ver el servidor
+              this.connectionEstablished.emit(false);
+            }); 
             this.startConnection();
           }
 

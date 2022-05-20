@@ -1714,13 +1714,8 @@ this.pillMenu.animacion();
             this.slideUp.lockSwipes(false);
             //this.LstTareas = await this.apiTareas.get().toPromise();
       } else {
-          this.apiHeartbeat.get().subscribe(() =>{
-            //Si tiene conexion con el servidor pero el websocket se desconecto
-          }, err => {
-            //No logro ver el servidor
             this.hayConexion = false;
             this.renderer.setStyle(this.avatarUser.nativeElement, 'color', `black`);
-          }); 
       }
     }
     public tamañoMover(): number{	
