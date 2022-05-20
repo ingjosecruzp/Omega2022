@@ -196,13 +196,13 @@ export class BooksComponent implements OnInit {
 
     setTimeout(async () => {
       //this.updateAutoHeightSlider.emit();
-   
+	
     });
 
-    setTimeout(() => {
+    setTimeout(async () => {
         
-      this.imgMansory.changes.subscribe(element => {
-        this.cargarMansoryPrimeraVez(null);
+      this.imgMansory.changes.subscribe(async () => {
+       await this.cargarMansoryPrimeraVez(null);
         console.log("changeMansory")
         this.observer = new IntersectionObserver((entries) => {
           /*   if(this.banderaInterseccion==1)
@@ -627,7 +627,7 @@ export class BooksComponent implements OnInit {
   }
 
   cargarMansoryPrimeraVez(e){
-    if(this.banderaImagen==1){
+    if(this.banderaImagen==1 || this.banderaImagen==2){
 		
       let elem = document.querySelector(".grid-containermasonry");
       this.msnry = new Masonry(elem, {
