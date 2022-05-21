@@ -10,10 +10,10 @@ export class HeartbeatService extends apiBase {
 
   constructor(public http: HttpClient) {
     super();
-    this.Ws = 'api/hearbeat';
+    this.Ws = 'api/heartbeat';
   }
 
   get(): Observable<any> {
-    return this.http.get<any>(`${this.url}/${this.Ws}`);
+    return this.http.get<any>(`${this.url}/${this.Ws}`,);
   }
 }

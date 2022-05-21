@@ -19,6 +19,7 @@ export class WebsocketService {
   private connectionIsEstablished = false;
   private _hubConnection: HubConnection;
   private closedConnection = false;
+  private intentosConexion = 0;
 
   constructor(private api: apiBase,private apiHeartbeat:HeartbeatService) {
 
@@ -57,14 +58,19 @@ export class WebsocketService {
     this._hubConnection
       .start()
       .then(() => {
+		this.intentosConexion = 0; 
         this.connectionIsEstablished = true;
         console.log('Hub connection started');
         this.connectionEstablished.emit(true);
       })
       .catch(err => {
         console.log('Error while establishing connection, retrying...');
-        //this.connectionEstablished.emit(false);
-        setTimeout(() => { this.startConnection(); }, 5000);
+		if(this.intentosConexion > 1)
+        	this.connectionEstablished.emit(false);
+        setTimeout(() => { 
+			this.startConnection();
+			this.intentosConexion += 1; 
+		}, 5000);
       });
 
   }
@@ -81,6 +87,7 @@ export class WebsocketService {
               //Si tiene conexion con el servidor pero el websocket se desconecto
             }, err => {
               //No logro ver el servidor
+			  console.log("apiHeartbeat",err);
               this.connectionEstablished.emit(false);
             }); 
             this.startConnection();

@@ -1714,6 +1714,7 @@ this.pillMenu.animacion();
             this.slideUp.lockSwipes(false);
             //this.LstTareas = await this.apiTareas.get().toPromise();
       } else {
+		  	console.log("sin conexion al webosocket");
             this.hayConexion = false;
             this.renderer.setStyle(this.avatarUser.nativeElement, 'color', `black`);
       }
