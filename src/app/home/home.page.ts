@@ -50,6 +50,7 @@ import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { isDevMode } from '@angular/core';
 import { ActPortadasService } from '../services/act-portadas.service';
 import { ConnectivityService } from '../services/connectivity.service';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 
 
 mobiscroll.settings = {
@@ -241,7 +242,7 @@ export class HomePage {
               private pushService: PushService,private apiDevice: DevicesService,private apiPortadas: PortadasService,
               private transfer: FileTransfer,private file: File,private zip: Zip,public themeSwitcher: ThemeSwitcherService,
 			        private api: apiBase,private webview: WebView,private actPortadasService: ActPortadasService, public connectivityService: ConnectivityService,
-              private cdRef : ChangeDetectorRef ) {
+              private cdRef : ChangeDetectorRef,  private splashScreen: SplashScreen ) {
     //  this.scrollenable = true;
 
 
@@ -704,6 +705,7 @@ this.pillMenu.animacion();
              swiper.loopDestroy();
              swiper.loopCreate();
              console.log('reborn!')
+			 this.splashScreen.hide();
          },2000);
         });
       }, 100);
