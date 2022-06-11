@@ -167,7 +167,7 @@
 
             </div>
             <div style="cursor: pointer;">
-                <img [src]="item.RutaThumbnails | sanitizePipe: 'resourceUrl'" class="image-rouder masonry-content" width="100%" style="cursor: pointer; object-fit: unset;" (click)="openBook(item)">
+                <img [src]="item.RutaThumbnails | sanitizePipe: 'resourceUrl'" class="image-rouder masonry-content" width="100%" style="cursor: pointer; object-fit: cover;" (click)="openBook(item)">
 
                 <app-circle-progress [ngStyle]="{'display' : item.descarga}" [item]="item" (click)="openBook(item)" style="position: absolute;z-index: 3;top: 40%;left: 50%;margin-right: -50%;transform: translate(-50%, -50%);cursor: pointer;"></app-circle-progress>
                 <ion-icon name="cloud-download" [ngStyle]="{'display' : item.flecha}" class="downLoadSytle" (click)="openBook(item)"></ion-icon>
