@@ -7,6 +7,7 @@ import { WebsocketService } from 'src/app/services/websocket.service';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { ThemeSwitcherService } from 'src/app/services/theme-switcher.service';
 import { ThrowStmt } from '@angular/compiler';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,8 @@ export class LoginPage implements OnInit {
 
   constructor(private authService: AuthenticationService, private fb: FormBuilder,
     private alertCtrl: AlertController,public loadingController: LoadingController,
-    public alertController: AlertController,private router: Router,public webSocket: WebsocketService,private statusBar: StatusBar, private themeSwitcher: ThemeSwitcherService  ) { 
+    public alertController: AlertController,private router: Router,public webSocket: WebsocketService,private statusBar: StatusBar, 
+	private themeSwitcher: ThemeSwitcherService,  private splashScreen: SplashScreen  ) { 
       this.FrmLogin = this.fb.group({
         Usuario: ['', [Validators.required]],
         Password: ['',[Validators.required]]
@@ -28,7 +30,7 @@ export class LoginPage implements OnInit {
   ngOnInit() {
     
     this.statusBar.backgroundColorByHexString('#6228cf');
-
+	this.splashScreen.hide();
   }
 
   ngAfterViewInit() {
