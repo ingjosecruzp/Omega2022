@@ -208,6 +208,19 @@ export class DetallePage implements OnInit {
 
    if (this.comentarioNuevo == '')return;
 
+   console.log(this.comentarioNuevo);
+   if(this.LstFiles.length==0 && (this.comentarioNuevo!= '' && this.comentarioNuevo!= null)) {
+     const alertTerminado = await this.alertCtrl.create({
+       header: 'Evidencia',
+       backdropDismiss: false,
+       message: 'No puedes enviar un comentario sin antes adjuntar una evidencia',
+       buttons: ["Aceptar"]
+     });
+
+     await alertTerminado.present();
+     return; 
+   }
+
    console.log("cargando comentario")
    let usuarioEvidencia="";
    console.log(this.tipoUsuario);
@@ -449,7 +462,7 @@ export class DetallePage implements OnInit {
         return;
 
     console.log(this.comentario);
-    if(this.LstFiles.length==0 && (this.comentario!= '' && this.comentario!= null)) {
+    /*if(this.LstFiles.length==0 && (this.comentario!= '' && this.comentario!= null)) {
       const alertTerminado = await this.alertCtrl.create({
         header: 'Evidencia',
         backdropDismiss: false,
@@ -459,7 +472,7 @@ export class DetallePage implements OnInit {
 
       await alertTerminado.present();
       return; 
-    }
+    }*/
 
     const alertTerminado = await this.alertCtrl.create({
       header: 'Evidencia',
@@ -472,6 +485,7 @@ export class DetallePage implements OnInit {
         {
           text: 'Enviar', handler: () => { 
             this.guardar();
+            this.enviarMensaje();
           }
         }
       ]
