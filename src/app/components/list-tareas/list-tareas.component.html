@@ -17,7 +17,9 @@
                 <!--ion-icon name="ellipse" style="float: right;color: red;" *ngIf="item.Id>13550 && visto== false && !permisoEditar()"></ion-icon>-->
                 <!--<ion-icon name="ellipse" style="float: right;color: red;" *ngIf="item.Id== 14170 && visto2== false && !permisoEditar()"></ion-icon>-->
                 <ion-icon name="ellipse" style="float: right;color: red;" *ngIf="!permisoEditar() && item.Tareasusuarios[0]?.Visto=='NO'"></ion-icon>
-
+                <ion-button fill="clear" (click)="presentActionSheet($event,item)" style="float: right;color: #1c1b1b;width: 30px;font-size: 11px;transform: scale(2.6) translate(6px, -2px);--border-color: #000000;--color: #000000;--background-activated: #00000000;" *ngIf="permisoEditar()">
+                    <ion-icon name="ellipsis-vertical"></ion-icon>
+                </ion-button>
                 <ion-card-title style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{ item.Titulo }}</ion-card-title>
             </ion-card-header>
             <ion-card-content style="white-space: pre-line;max-height: 200px;overflow: hidden;">

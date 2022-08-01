@@ -32,6 +32,7 @@ export class NuevoRecursoPage implements OnInit {
   GrupoIngles: any;
 
   @Input() item;
+  @Input() estadoFormulario; //Define si se ve crear, modificar o clonar una tarea
 
   constructor(private modalCtrl: ModalController,private formBuilder: FormBuilder, private cd:ChangeDetectorRef,
               private alertCtrl: AlertController,private apiTareas: TareasService,private apiChat: ChatService,
@@ -54,7 +55,7 @@ export class NuevoRecursoPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    console.log(this.item);
+    
     if(this.item != undefined) {
       this.FrmItem.patchValue(this.item);
       
@@ -72,12 +73,36 @@ export class NuevoRecursoPage implements OnInit {
 
       if(this.item.Image != undefined)
         this.texto_adjuntar_portada = 'Foto de Portada Seleccionada';
+        
+      if(this.estadoFormulario=="clonar"){
+        //this.item.Id = 0;
+        this.item.Grado = undefined;
+        this.item.Grupo = undefined;
+        this.item.MateriaId = undefined;
+        this.item.GrupoIngles = undefined;
+        this.item.MateriaId = undefined;
 
-      this.titulo = 'Modificar Tarea';
-      this.tituloBoton= 'Modificar Tarea';
+        this.titulo = 'Clonar Tarea';
+        this.tituloBoton= 'Clonar Tarea';
+
+        this.gradoSeleccionado = undefined;
+        this.grupoSeleccionado = undefined;
+        this.txtGradoGrupo.value = "";
+
+        this.txtMateria.value ="";
+        this.MateriaSeleccionada = undefined;
+
+        this.FrmItem.patchValue(this.item);
+        this.submitAttempt = true; // Simula que ya envio una peticion para poner las cajas de texto con alerta
+      } else {
+        this.titulo = 'Modificar Tarea';
+        this.tituloBoton= 'Modificar Tarea';
+      }
     } else {
       this.titulo = 'Nueva Tarea';
       this.tituloBoton = 'Crear Tarea';
+      
+      this.item.Clonada="NO";
     }
   }
 
@@ -118,6 +143,7 @@ export class NuevoRecursoPage implements OnInit {
     payload.append('Grado', this.gradoSeleccionado);
     payload.append('Grupo', this.grupoSeleccionado);
     payload.append('GrupoIngles', this.GrupoIngles);
+    payload.append('Clonada', this.estadoFormulario=="clonar" ? "SI" : "NO");
     
     if(this.files != undefined) //Valida si se selecciono alguna imagen
       payload.append('ImageUpload', this.files, this.files.name);
@@ -125,7 +151,7 @@ export class NuevoRecursoPage implements OnInit {
       console.log(this.item);
       console.log(payload);
     
-    if(this.item.Id == 0) {
+    if(this.item.Id == 0 || this.estadoFormulario=="clonar") {
         const tareaUpload = await this.apiTareas.save(payload).toPromise();
     }
     else {
@@ -155,6 +181,18 @@ export class NuevoRecursoPage implements OnInit {
         ]
       });
       await alertTerminado.present();
+    } else if(this.estadoFormulario=="clonar") {
+        const alertTerminado = await this.alertCtrl.create({
+          header: 'Tarea clonada con éxito',
+          backdropDismiss: false,
+          message: 'Se clono la tarea ' + this.FrmItem.get('Titulo').value,
+          buttons: [
+            {
+              text: 'Continuar', handler: () =>  this.closeModal()
+            }
+          ]
+        });
+        await alertTerminado.present();    
     } else {
       const alertTerminado = await this.alertCtrl.create({
         header: 'Tarea modificada con éxito',

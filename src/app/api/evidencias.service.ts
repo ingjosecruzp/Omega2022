@@ -36,4 +36,14 @@ export class EvidenciasService  extends apiBase  {
   getInfinite(skip,take): Observable<any[]> {
     return this.http.get<any[]>(`${this.url}/${this.Ws}/infinite/${skip}/${take}`);
   }
+
+  getEvidenciasComentarios(TareaId,UsuarioId): Observable<any[]> {	
+    return this.http.get<any[]>(`${this.url}/api/evidenciascomentarios/${TareaId}/${UsuarioId}`);	
+  }	
+  saveComentarios(item: any) {	
+    return this.http.post(`${this.url}/api/evidenciascomentarios`, item);	
+   }	
+   deleteComentario(Id){	
+    return this.http.delete(`${this.url}/api/evidenciascomentarios/${Id}`)	
+  }
 }
