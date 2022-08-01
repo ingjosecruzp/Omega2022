@@ -76,7 +76,7 @@
                         <div class="ion-text-center" *ngIf="spinnerComentarios==false">
                             <ion-spinner name="bubbles"></ion-spinner>
                         </div>
-                        <ion-textarea rows="5" placeholder="" *ngIf="spinnerComentarios==true">
+                        <div style="width: 100%;min-height: 30vh;" *ngIf="spinnerComentarios==true">
                             <ion-list>
                                 <ion-item lines="none" style="--padding-start: 0px;--inner-padding-end: 0px;--padding-bottom: 0px;">
                                     <ion-avatar slot="start" style="margin-inline: 0px 7px;">
@@ -118,7 +118,7 @@
                             </ion-list>
 
 
-                        </ion-textarea>
+                        </div>
                     </ion-item>
                     <ion-item class="ion-no-border" lines="none" *ngIf="tipoUsuario=='Profesor'">
                         <ion-button slot="end" size="small" fill="outline" type="button" icon-start outline block (click)="verAlumnos()">
@@ -199,7 +199,7 @@
                         <div class="ion-text-center" *ngIf="spinnerComentarios==false">
                             <ion-spinner name="bubbles"></ion-spinner>
                         </div>
-                        <ion-textarea *ngIf="spinnerComentarios==true" rows="5" placeholder="">
+                        <div *ngIf="spinnerComentarios==true" style="width: 100%;min-height: 30vh;">
                             <ion-list>
                                 <ion-item lines="none" style="--padding-start: 0px;--inner-padding-end: 0px;--padding-bottom: 0px;">
                                     <ion-avatar slot="start" style="margin-inline: 0px 7px;">
@@ -239,7 +239,7 @@
                                     </ion-item>
                                 </div>
                             </ion-list>
-                        </ion-textarea>
+                        </div>
                     </ion-item>
 
                 </ion-card>
