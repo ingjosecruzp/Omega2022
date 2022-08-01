@@ -47,3 +47,53 @@ ion-progress-bar {
     --buffer-background: #c3aded;
     --progress-background:#6228cf;
 }
+
+.spanComentarios:after {	
+    content: "•";	
+    margin: 0 4px;	
+}	
+::ng-deep .my-custom-class {	
+    --button-color: #222223 !important;	
+}	
+::ng-deep .my-custom-class .action-sheet-group {	
+    --button-color: #222223 !important;	
+}	
+::ng-deep .sc-ion-action-sheet-ios-h {	
+    --button-color: #222223 !important;	
+}	
+::ng-deep .action-sheet-button.sc .ion-action-sheet-ios {	
+    color: #000000 !important;	
+    --button-color: #222223 !important;	
+}	
+::ng-deep .action-sheet-group .sc-ion-action-sheet-ios {	
+    --button-color: #222223 !important;	
+    margin-inline-end: 10px;	
+    font-weight: bold;	
+}	
+::ng-deep .action-sheet-button.sc-ion-action-sheet-ios {	
+    padding-top: 0px;	
+}	
+::ng-deep .action-sheet-button-inner.sc-ion-action-sheet-ios {	
+    justify-content: left;	
+    font-size: 16px;	
+}	
+::ng-deep .action-sheet-button.sc-ion-action-sheet-ios .action-sheet-icon.sc-ion-action-sheet-ios {	
+    font-size: 22px;	
+    padding-bottom: 3px;	
+}	
+::ng-deep .action-sheet-button.sc-ion-action-sheet-ios .action-sheet-icon.sc-ion-action-sheet-ios {	
+    margin-inline-end: 18px;	
+}
+
+::ng-deep .my-custom-disable-button-class .action-sheet-button.sc .ion-action-sheet-ios {
+    cursor: not-allowed;
+    --button-color: #9e9e9e !important;
+    pointer-events:none;
+    //background-color: rgb(229, 229, 229) !important;
+}
+::ng-deep  .my-custom-disable-button-class .action-sheet-group .sc-ion-action-sheet-ios {
+    cursor: not-allowed;
+    --button-color: #9e9e9e !important;
+    pointer-events:none;
+    //background-color: rgb(229, 229, 229) !important;
+}

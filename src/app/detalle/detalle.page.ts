@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ChangeDetectorRef, ApplicationRef, ViewChild } from '@angular/core';
-import { ModalController, LoadingController,Platform, ToastController, AlertController,IonSlides } from '@ionic/angular';
+import { ModalController, LoadingController, Platform, ToastController, AlertController, IonSlides, IonContent, ActionSheetController } from '@ionic/angular';
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { File,FileEntry } from '@ionic-native/file/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
@@ -13,6 +13,8 @@ import { EvidenciasService } from '../api/evidencias.service';
 import { GlobalService } from '../services/global.service';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { TareasService } from '../api/tareas.service';
+import { UsuariosService } from '../api/usuarios.service';
+
 
 @Component({
   selector: 'app-detalle',
@@ -23,23 +25,43 @@ export class DetallePage implements OnInit {
   @Input() item;
   loading: any;
   segmentaActivated: any = 'instrucciones';
+  private mutationObserver: MutationObserver;
   LstAlumnos: any[] = [];
   LstFiles: any[] = [];
   LstEvidencias: any[] = [];
+  LstComentarios: any[] = [];
   public FrmItem: FormGroup;
   private files: any;
   public submitAttempt: boolean = false;
   comentario: any;
+  comentarioNuevo: any;
+  public objComentario : any;
+  public objComentarioApi : any;
+  tipoUsuario: any;
   slideOpts = {
     autoHeight: true
   };
-  tipoUsuario: any;
+  public user = {
+    Id : '',
+    NombreCompleto : '',
+    Nombre : '',
+    ApellidoPaterno : '',
+    Grado  : '',
+    Grupo : '',
+    Escolaridad: '',
+    GradoIngles: '',
+    GrupoIngles: '',
+    Usuario: '',
+    Tipo:'',
+    PlayerId: ''
+  };
   @ViewChild('slider', {static: false}) slider: IonSlides;
   usuarioSeleccionado: any="Seleccione un alumno";
   showBackButton:boolean = false;
   private imgBlob: any;
   fotoActviva: boolean = false;
   spinnerShow:boolean = false;
+  spinnerComentarios:boolean = false;
   eliminando: boolean=false;
   totalEntregadas: number = 0;
   totalPendientes: number = 0;
@@ -50,7 +72,7 @@ export class DetallePage implements OnInit {
               private apiAlumnos: AlumnosService,public toastController: ToastController,private cd:ChangeDetectorRef,
               private fileClound: DownloadFileService,private formBuilder: FormBuilder, private applicationRef: ApplicationRef,
               private alertCtrl: AlertController,private apiEvidencias: EvidenciasService,private globalServicies: GlobalService,
-              private camera: Camera,private apiTareas: TareasService) { 
+              private camera: Camera,private apiTareas: TareasService, private apiUsuarios: UsuariosService, public actionSheetController: ActionSheetController) { 
 
                 this.FrmItem = formBuilder.group({
                   Image: [null, Validators.compose([])]
@@ -58,9 +80,8 @@ export class DetallePage implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.item);
-    this.tipoUsuario=this.globalServicies.getKeyToken("tipo");
 
+    this.tipoUsuario=this.globalServicies.getKeyToken("tipo");
     if(this.item.Image != undefined)
     {
       console.log(this.item.Image.includes('http://'));
@@ -75,7 +96,7 @@ export class DetallePage implements OnInit {
 
   async ionViewDidEnter() {
     let index;
-
+    
     if(this.item.Escolaridad=="Kinder") index=1;
     else if(this.item.Escolaridad=="Primaria") index=2;
     else if(this.item.Escolaridad=="Secundaria") index=3;
@@ -125,11 +146,15 @@ export class DetallePage implements OnInit {
         this.item.Tareasusuarios[0].Visto='SI';
 
       this.cargarEvidencia();
+      this.cargarComentarios();
     }
+    
+
   }
 
   async cargarEvidencia(){
-    
+   
+    console.log("cargando evidencia")
       this.apiEvidencias.getEvidenciasTarea(this.item.Id).subscribe(data => {
           if(data.length > 0) {
             this.LstFiles = data;
@@ -142,8 +167,71 @@ export class DetallePage implements OnInit {
       });
   }
 
+  async cargarComentarios(){
+
+     /* nos traemos informacion completa del usuario*/
+     const UsuarioId =this.globalServicies.getKeyToken('id');
+     this.apiUsuarios.getUsuario(UsuarioId).subscribe(data => {
+      console.log('idataaaaaaa',data)
+        this.user.Id = data["Id"];
+        this.user.NombreCompleto = data["NombreCompleto"];
+        this.user.Nombre = data["Nombre"];
+        this.user.ApellidoPaterno = data["ApellidoPaterno"];
+        this.user.Grado = data["Grado"];
+        this.user.Grupo = data["Grupo"];
+        this.user.Escolaridad = data["Escolaridad"];
+        this.user.GradoIngles = data["GradoIngles"];
+        this.user.GrupoIngles = data["GrupoIngles"];
+        this.user.Usuario = data["Usuario"];
+        this.user.Tipo = data["Tipo"];
+     });
+ 
+
+    console.log("cargando comentario")
+    let usuarioEvidencia="";
+    console.log(this.tipoUsuario);
+    if(this.tipoUsuario=="Profesor") usuarioEvidencia = this.usuarioSeleccionado.Id; else usuarioEvidencia = this.item.Tareasusuarios[0].UsuarioId;
+    console.log(usuarioEvidencia);
+      this.apiEvidencias.getEvidenciasComentarios(this.item.Id,usuarioEvidencia).subscribe(data => {
+        this.LstComentarios=data;
+        this.spinnerComentarios=true;
+        console.log(this.LstComentarios)
+      });
+  }
+
 
   buscarEvidencia() {
+
+  }
+
+  async enviarMensaje() {
+
+   if (this.comentarioNuevo == '')return;
+
+   console.log("cargando comentario")
+   let usuarioEvidencia="";
+   console.log(this.tipoUsuario);
+   if(this.tipoUsuario=="Profesor") usuarioEvidencia = this.usuarioSeleccionado.Id; else usuarioEvidencia = this.item.Tareasusuarios[0].UsuarioId;
+    console.log("item" + this.item);
+    this.objComentario = {
+      Comentario : this.comentarioNuevo,
+      FechaComentario :  Date.now().toString(),
+      TipoComentario : this.tipoUsuario,
+      Usuario : { NombreCompleto : this.user.Nombre + ' ' +  this.user.ApellidoPaterno }
+    }
+
+    this.objComentarioApi = {
+      UsuarioId : usuarioEvidencia,
+      TareaId : this.item.Id,
+      MateriaId: this.item.MateriaId,
+      Comentario : this.comentarioNuevo
+    }
+
+    const tareaUpload = await this.apiEvidencias.saveComentarios(this.objComentarioApi).toPromise(); //manda agregar el comentario y se espera
+   // this.LstComentarios.push(this.objComentario); //para pintar la vista se agrega a la lista
+    this.LstComentarios.unshift(this.objComentario);//para pintar la vista se agrega a la lista
+    this.applicationRef.tick();
+    this.comentarioNuevo = '';
 
   }
 
@@ -151,15 +239,47 @@ export class DetallePage implements OnInit {
     this.slider.slidePrev();
   }
 
+  async presentActionSheet(item,estadoAction) {
+    const actionSheet = await this.actionSheetController.create({
+      mode: 'ios', 
+      header: 'Opciones',
+      cssClass: estadoAction,
+      buttons: [
+        {
+          text: 'Eliminar',
+          icon: 'trash-bin',
+          cssClass: 'my-custom-class', 
+          
+          handler: () => {
+            this.deleteComentario(item);
+          },
+        }],
+    });
+    await actionSheet.present();
+
+    const { role } = await actionSheet.onDidDismiss();
+    console.log('onDidDismiss resolved with role', role);
+  }
+
   ionSlideDidChange() {
     console.log("ionSlideDidChange");
     this.slider.getActiveIndex().then(index => {
-       //console.log(index);
+       console.log(index);
        if(index > 0)
          this.showBackButton=true;
         else
           this.showBackButton=false;
+
+          if(index == 2) 
+         this.cargarComentarios();
+ 
     })
+  }
+
+  async deleteComentario(item){
+     
+    await this.apiEvidencias.deleteComentario(item.Id).toPromise();
+    this.LstComentarios = this.LstComentarios.filter(obj => obj !== item);
   }
 
   async verEvidenciaAlumno(evidencia) {

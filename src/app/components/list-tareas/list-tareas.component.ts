@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
-import { AlertController, LoadingController, ModalController, IonInfiniteScroll, IonVirtualScroll } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, IonInfiniteScroll, IonVirtualScroll,ActionSheetController } from '@ionic/angular';
 import { TareasService } from 'src/app/api/tareas.service';
 import { DetallePage } from 'src/app/detalle/detalle.page';
 import { NuevoRecursoPage } from 'src/app/nuevo-recurso/nuevo-recurso.page';
@@ -24,8 +24,8 @@ export class ListTareasComponent implements OnInit {
   @ViewChild(IonInfiniteScroll, {static: false}) infiniteScroll: IonInfiniteScroll;
   @ViewChild(IonVirtualScroll, {static: false}) virtualScroll: IonVirtualScroll;
 
-
-  constructor(private apiTareas: TareasService, private modalCrl: ModalController, private loadingController: LoadingController, private alertController: AlertController) {
+  
+  constructor(private apiTareas: TareasService, private modalCrl: ModalController, private loadingController: LoadingController,private alertController: AlertController, public actionSheetController: ActionSheetController ) {
   }
 
   ngOnInit() {
@@ -113,6 +113,29 @@ export class ListTareasComponent implements OnInit {
    
   }
 
+  public async clonarTarea(event, item){
+    event.stopPropagation();
+    
+    const modal = await this.modalCrl.create({
+      component: NuevoRecursoPage,
+      cssClass: 'my-custom-modal-css-capturas',
+      showBackdrop: false,
+      componentProps: { item: {...item}, estadoFormulario: "clonar"},
+      mode: 'ios',
+      backdropDismiss: true
+    });
+
+    await modal.present();
+
+    modal.onDidDismiss().then(async (data) => {
+      if (data.data.banderaEdito == true) {
+          await this.cargandoAnimation('Cargando...');
+          this.LstTareas = await this.apiTareas.get().toPromise();
+          this.loadingController.dismiss();
+      }
+    });
+  }
+
   public async editaTarea(event, item) {
     event.stopPropagation();
 
@@ -121,7 +144,7 @@ export class ListTareasComponent implements OnInit {
       // cssClass: 'my-custom-modal-css',
       cssClass: 'my-custom-modal-css-capturas',
       showBackdrop: false,
-      componentProps: {item},
+      componentProps: {item:{...item}},
       mode: 'ios',
       backdropDismiss: true
     });
@@ -138,6 +161,43 @@ export class ListTareasComponent implements OnInit {
     });
   }
 
+  async presentActionSheet(event,item) {	
+    event.stopPropagation();	
+    //e.preventDefault();	
+  const actionSheet = await this.actionSheetController.create({	
+    mode: 'ios', 	
+    header: 'Opciones',	
+    cssClass: 'my-custom-class',	
+    buttons: [	
+      {	
+        text: 'Clonar',	
+        icon: 'documents',	
+        //cssClass: 'disable-action-sheet-btns', 	        
+        handler: () => {	
+          this.clonarTarea(event,item);	
+        },	
+      },	
+      {	
+        text: 'Editar',	
+        icon: 'create',	
+        //cssClass: 'disable-action-sheet-btns', 	
+        handler: () => {	
+          this.editaTarea(event,item);	
+        },	
+      },	
+      {	
+        text: 'Eliminar',	
+        icon: 'close-circle',	
+        //cssClass: 'my-custom-class', 	
+        handler: () => {	
+          this.eliminar(event,item);	
+        },	
+      }],	
+  });	
+  await actionSheet.present();	
+  const { role } = await actionSheet.onDidDismiss();	
+  console.log('onDidDismiss resolved with role', role);	
+}
 
   public permisoEditar() {
     const jwt_temp = localStorage.getItem('USER_INFO_TEMP');
@@ -155,9 +215,10 @@ export class ListTareasComponent implements OnInit {
 
   // Eliminar tarea
   public async eliminar(event, item) {
+    this.clonarTarea(event,item);
+    return;
     event.stopPropagation();
     console.log(item);
-
     const alertTerminado = await this.alertController.create({
       header: 'ELIMINAR',
       message: '¿Está seguro de ELIMINAR la tarea?, si la tarea ya cuenta con evidencia serán eliminadas',
