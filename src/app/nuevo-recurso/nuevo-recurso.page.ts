@@ -1,9 +1,10 @@
-import { Component, OnInit, ChangeDetectorRef,ViewChild,ElementRef,Input } from '@angular/core';
-import { ModalController, AlertController, PickerController,IonInput, LoadingController, ToastController } from '@ionic/angular';
+import { Component, OnInit, ChangeDetectorRef,ViewChild,ElementRef,Input, Renderer2} from '@angular/core';
+import { ModalController, AlertController, PickerController,IonInput, LoadingController, ToastController, IonSelect, IonSelectOption } from '@ionic/angular';
 import { FormGroup, FormBuilder,Validators  } from '@angular/forms';
 import { TareasService } from '../api/tareas.service';
 import { ChatService } from '../api/chat.service';
 import { MateriasService } from '../api/materias.service';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-nuevo-recurso',
@@ -15,6 +16,7 @@ export class NuevoRecursoPage implements OnInit {
   @ViewChild('txtGradoGrupo', {read: ElementRef, static: true}) txtGradoGrupoHTML: ElementRef;
   @ViewChild('txtMateria', {static: false}) txtMateria: IonInput;
   @ViewChild('txtMateria', {read: ElementRef, static: true}) txtMateriaHTML: ElementRef;
+  @ViewChild('filtrosGrupos', {static: false}) filtrosGrupos: IonSelect;
   public FrmItem: FormGroup;
   public  texto_adjuntar_portada: string = 'Foto de Portada';
   public submitAttempt: boolean = false;
@@ -22,10 +24,12 @@ export class NuevoRecursoPage implements OnInit {
   private files: any;
   grupos: any[] = [];
   materias: any[] = [];
+  gruposSeleccionados: any[] = [];
   gradoSeleccionado: any;
   grupoSeleccionado: any;
   MateriaSeleccionada: any;
   EscolaridadSeleccionada:any;
+  tempGradoSeleccionado: number = 0;
   titulo: any;
   tituloBoton: any;
   banderaEdito: boolean=false;
@@ -37,7 +41,7 @@ export class NuevoRecursoPage implements OnInit {
   constructor(private modalCtrl: ModalController,private formBuilder: FormBuilder, private cd:ChangeDetectorRef,
               private alertCtrl: AlertController,private apiTareas: TareasService,private apiChat: ChatService,
               private apiMaterias: MateriasService,private pickerController: PickerController,public loadingController: LoadingController,
-              public toastController: ToastController) {
+              public toastController: ToastController,private renderer: Renderer2) {
     this.FrmItem = formBuilder.group({
       Id:   [0, Validators.compose([Validators.required])],
       Grupo:   ['', Validators.compose([Validators.required])],
@@ -97,116 +101,135 @@ export class NuevoRecursoPage implements OnInit {
       } else {
         this.titulo = 'Modificar Tarea';
         this.tituloBoton= 'Modificar Tarea';
+
+        this.item.Clonada="NO";
       }
     } else {
       this.titulo = 'Nueva Tarea';
       this.tituloBoton = 'Crear Tarea';
       
-      this.item.Clonada="NO";
+      //this.item.Clonada="NO";
     }
   }
 
   async crearNoticia() {
-    this.submitAttempt = true;
-
     const loading = await this.loadingController.create({
       message: 'Guardando...'
     });
 
-    console.log(this.FrmItem);
-    if (!this.FrmItem.valid) {
+    try {
+        this.submitAttempt = true;
 
-      const alert = await  this.alertCtrl.create({
-        header: 'No concluiste con el formulario',
-        subHeader: 'El formulario se encuentra incompleto, favor de completar los datos faltantes.',
-        mode: 'ios',
-        buttons: ['Aceptar']
-      });
+        console.log(this.FrmItem);
+        if (!this.FrmItem.valid) {
 
-      await alert.present();
-      return;
+          const alert = await  this.alertCtrl.create({
+            header: 'No concluiste con el formulario',
+            subHeader: 'El formulario se encuentra incompleto, favor de completar los datos faltantes.',
+            mode: 'ios',
+            buttons: ['Aceptar']
+          });
+
+          await alert.present();
+          return;
+        }
+
+        await loading.present();
+
+        
+        this.item = this.FrmItem.value;
+        console.log(this.item);
+        
+        const payload = new FormData();
+        payload.append('Id', this.item.Id);
+        payload.append('Titulo', this.item.Titulo);
+        payload.append('Descripcion', this.item.Descripcion);
+        payload.append('FechaPublicacion', this.item.FechaPublicacion.toString());
+        payload.append('HoraPublicacion', this.item.HoraPublicacion);
+        payload.append('MateriaId', this.MateriaSeleccionada);
+        payload.append('Grado', this.gradoSeleccionado);
+        payload.append('Grupo', this.grupoSeleccionado);
+        payload.append('GrupoIngles', this.GrupoIngles);
+        payload.append('Clonada', this.estadoFormulario=="clonar" ? "SI" : "NO");
+        
+        if(this.files != undefined) //Valida si se selecciono alguna imagen
+          payload.append('ImageUpload', this.files, this.files.name);
+
+          console.log(this.item);
+          console.log(payload);
+        
+        if(this.item.Id == 0 || this.estadoFormulario=="clonar") {
+            const tareaUpload = await this.apiTareas.save(payload).toPromise();
+        }
+        else {
+            const tareaUpload =await this.apiTareas.update(payload).toPromise();
+        }
+
+        this.banderaEdito=true;
+        this.submitAttempt = false;
+
+        this.loadingController.dismiss();
+
+        if(this.item.Id == 0) {
+          const alertTerminado = await this.alertCtrl.create({
+            header: 'Tarea creada con éxito',
+            backdropDismiss: false,
+            message: 'Se creó la tarea ' + this.FrmItem.get('Titulo').value + ', ¿desea crear otra tarea?',
+            buttons: [
+              {
+                text: 'No', handler: () =>  this.closeModal()
+              },
+              {
+                text: 'Crear otra', handler: () =>{ 
+                  this.FrmItem.reset(); 
+                  this.FrmItem.controls['Id'].setValue(0);
+                }
+              }
+            ]
+          });
+          await alertTerminado.present();
+        } else if(this.estadoFormulario=="clonar") {
+            const alertTerminado = await this.alertCtrl.create({
+              header: 'Tarea clonada con éxito',
+              backdropDismiss: false,
+              message: 'Se clono la tarea ' + this.FrmItem.get('Titulo').value,
+              buttons: [
+                {
+                  text: 'Continuar', handler: () =>  this.closeModal()
+                }
+              ]
+            });
+            await alertTerminado.present();    
+        } else {
+          const alertTerminado = await this.alertCtrl.create({
+            header: 'Tarea modificada con éxito',
+            backdropDismiss: false,
+            message: 'Se modificó la tarea ' + this.FrmItem.get('Titulo').value,
+            buttons: [
+              {
+                text: 'Continuar', handler: () =>  this.closeModal()
+              }
+            ]
+          });
+          await alertTerminado.present();
+        }
     }
+    catch(error){
 
-    await loading.present();
+      loading.dismiss();
 
-    
-    this.item = this.FrmItem.value;
-    console.log(this.item);
-    
-    const payload = new FormData();
-    payload.append('Id', this.item.Id);
-    payload.append('Titulo', this.item.Titulo);
-    payload.append('Descripcion', this.item.Descripcion);
-    payload.append('FechaPublicacion', this.item.FechaPublicacion.toString());
-    payload.append('HoraPublicacion', this.item.HoraPublicacion);
-    payload.append('MateriaId', this.MateriaSeleccionada);
-    payload.append('Grado', this.gradoSeleccionado);
-    payload.append('Grupo', this.grupoSeleccionado);
-    payload.append('GrupoIngles', this.GrupoIngles);
-    payload.append('Clonada', this.estadoFormulario=="clonar" ? "SI" : "NO");
-    
-    if(this.files != undefined) //Valida si se selecciono alguna imagen
-      payload.append('ImageUpload', this.files, this.files.name);
-
-      console.log(this.item);
-      console.log(payload);
-    
-    if(this.item.Id == 0 || this.estadoFormulario=="clonar") {
-        const tareaUpload = await this.apiTareas.save(payload).toPromise();
-    }
-    else {
-        const tareaUpload =await this.apiTareas.update(payload).toPromise();
-    }
-
-    this.banderaEdito=true;
-    this.submitAttempt = false;
-
-    this.loadingController.dismiss();
-
-    if(this.item.Id == 0) {
       const alertTerminado = await this.alertCtrl.create({
-        header: 'Tarea creada con éxito',
+        header: 'Tuvimos unos detalles en la creación de la tarea, inténtelo de nuevo.',
         backdropDismiss: false,
-        message: 'Se creó la tarea ' + this.FrmItem.get('Titulo').value + ', ¿desea crear otra tarea?',
-        buttons: [
-          {
-            text: 'No', handler: () =>  this.closeModal()
-          },
-          {
-            text: 'Crear otra', handler: () =>{ 
-              this.FrmItem.reset(); 
-              this.FrmItem.controls['Id'].setValue(0);
-            }
-          }
-        ]
-      });
-      await alertTerminado.present();
-    } else if(this.estadoFormulario=="clonar") {
-        const alertTerminado = await this.alertCtrl.create({
-          header: 'Tarea clonada con éxito',
-          backdropDismiss: false,
-          message: 'Se clono la tarea ' + this.FrmItem.get('Titulo').value,
-          buttons: [
-            {
-              text: 'Continuar', handler: () =>  this.closeModal()
-            }
-          ]
-        });
-        await alertTerminado.present();    
-    } else {
-      const alertTerminado = await this.alertCtrl.create({
-        header: 'Tarea modificada con éxito',
-        backdropDismiss: false,
-        message: 'Se modificó la tarea ' + this.FrmItem.get('Titulo').value,
+        message: error["message"],
         buttons: [
           {
             text: 'Continuar', handler: () =>  this.closeModal()
           }
         ]
       });
-      await alertTerminado.present();
+      await alertTerminado.present();    
     }
-
   }
 
   onFileChange($event: any) {
@@ -246,6 +269,31 @@ export class NuevoRecursoPage implements OnInit {
   }
 
   async openPickerGrupos() {
+
+    this.grupos = await this.apiChat.getGruposMaestros().toPromise();
+    //console.log(this.grupos);
+    let checkBoxes: HTMLCollection;
+
+    this.filtrosGrupos.open().then(alert => {
+      console.log(alert);
+      checkBoxes = alert.getElementsByClassName("alert-checkbox-button");
+      console.log(checkBoxes);
+
+      let index=0;
+      for(let item of checkBoxes) {
+        this.renderer.setAttribute(item,"data-id",index.toString());
+        this.renderer.listen(item,"click",(evt) => {
+          const idCheck =(item as HTMLButtonElement).attributes["data-id"].value;
+          this.triggerMe(item,idCheck);
+        });
+        console.log(index);
+        index += 1;
+      }
+
+    });
+
+    return;
+
     const picker = await this.pickerController.create({
         mode : 'ios',
         buttons: [
@@ -281,6 +329,69 @@ export class NuevoRecursoPage implements OnInit {
     
     picker.present();
 
+  }
+  triggerMe(item,index) {
+    console.log(item);
+    console.log("selected value", this.grupos[index]);
+    console.log(this.gruposSeleccionados);
+    
+    if(this.tempGradoSeleccionado == 0)
+    {
+        this.tempGradoSeleccionado = this.grupos[index].Grado;
+        this.gruposSeleccionados.push({...this.grupos[index]});
+        return;
+    }
+    if(this.tempGradoSeleccionado != this.grupos[index].Grado) {
+      console.log("grados diferentes");
+      (item as HTMLButtonElement).click();
+    }
+  }
+
+  ionChangeFiltrosGrupos(event){
+    console.log("ionChangeFiltrosGrupos");
+    console.log(event);
+    let text="";
+
+    if(!Array.isArray(event.detail.value))
+      return;
+
+    console.log(event.detail.value.length);
+    event.detail.value.forEach((element,idx,array) => {
+      if (idx === array.length - 1){ 
+        text += `${element.Grado}${element.Grupo} ${element.Escolaridad}`;
+      }
+      else {
+        //text += element.Id + ",";
+        text += `${element.Grado}${element.Grupo} ${element.Escolaridad},`;
+      }
+    });
+
+    console.log(text);
+    //const gradoGrupo = value.Grupos.value.split("/");
+    this.txtGradoGrupo.value = text;
+    this.gradoSeleccionado = event.detail.value[0].Grado;
+    this.grupoSeleccionado = event.detail.value.map(u => u.Grupo).join(', ');
+    this.EscolaridadSeleccionada = event.detail.value[0].Escolaridad;
+    this.GrupoIngles = event.detail.value[0].GrupoIngles;
+
+    this.txtMateria.value = "";
+    this.MateriaSeleccionada = "";
+  }
+
+  
+  compareWith(o1: any, o2: any | any[]) {
+    console.log(o2);
+    
+    if (!o1 || !o2) {
+      //Entra la primera vez que no se ha seleccionado nada
+      return o1 === o2;
+    }
+
+    if (Array.isArray(o2)) {
+      return o2.some((u: any) => u.Grado == o1.Grado && u.Grupo == o1.Grupo && u.Escolaridad == o1.Escolaridad && u.GrupoIngles== o1.GrupoIngles);
+    }
+
+    return o1.Id === o2.Id;
   }
 
   async getColumnGrupos() {

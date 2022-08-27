@@ -215,8 +215,7 @@ export class ListTareasComponent implements OnInit {
 
   // Eliminar tarea
   public async eliminar(event, item) {
-    this.clonarTarea(event,item);
-    return;
+    
     event.stopPropagation();
     console.log(item);
     const alertTerminado = await this.alertController.create({
