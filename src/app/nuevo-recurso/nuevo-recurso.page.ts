@@ -331,9 +331,9 @@ export class NuevoRecursoPage implements OnInit {
 
   }
   triggerMe(item,index) {
-    console.log(item);
+    /*console.log(item);
     console.log("selected value", this.grupos[index]);
-    console.log(this.gruposSeleccionados);
+    console.log(this.gruposSeleccionados);*/
     
     if(this.tempGradoSeleccionado == 0)
     {
@@ -343,6 +343,7 @@ export class NuevoRecursoPage implements OnInit {
     }
     if(this.tempGradoSeleccionado != this.grupos[index].Grado) {
       console.log("grados diferentes");
+      this.presentToast("No puede seleccionar dos grupos de grados diferentes.");
       (item as HTMLButtonElement).click();
     }
   }
