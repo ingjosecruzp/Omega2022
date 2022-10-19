@@ -4,6 +4,7 @@ import { ModalController, IonContent } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators  } from '@angular/forms';
 import { WebsocketService } from '../../services/websocket.service';
 import { Subscription } from 'rxjs';
+import { runInThisContext } from 'vm';
 
 
 @Component({
@@ -25,6 +26,7 @@ export class DetallesChatPage implements OnInit {
   groupId: string;
   usuarioId: number;
   subscribeChat: Subscription;
+  eviandoMensaje:boolean = false;
 
   @ViewChild('Content', {static: true}) contentArea: IonContent;
 
@@ -76,6 +78,14 @@ export class DetallesChatPage implements OnInit {
   }
 
   async crearMensaje() {
+    try {
+      
+      if(this.eviandoMensaje == true) {
+          return;
+      }
+
+      console.log("crear mensaje");
+      this.eviandoMensaje = true;
       this.itemApiChat = this.FrmItem.value;
       this.itemApiChat.UsuarioIdOrigen = this.item.UsuarioId;
       this.itemApiChat.UsuarioIdDestino = this.item.UsuarioId2;
@@ -89,6 +99,12 @@ export class DetallesChatPage implements OnInit {
       //this.LstChats.unshift(this.itemApiChat);
       console.log(this.itemApiChat);
       this.LstChats.push(this.itemApiChat);
+      this.eviandoMensaje = false;
+    }
+    catch(err) {
+      console.log(err);
+      this.eviandoMensaje = false;
+    }
   }
 
   closeModal() {

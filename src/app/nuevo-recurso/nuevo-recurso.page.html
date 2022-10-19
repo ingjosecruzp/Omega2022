@@ -25,7 +25,7 @@
                             </ion-item>
                             <ion-item style="display: none;">
                                 <ion-label style="display: none;">Grupos</ion-label>
-                                <ion-select #filtrosGrupos [compareWith]="compareWith" multiple="true" (ionChange)="ionChangeFiltrosGrupos($event)">
+                                <ion-select #filtrosGrupos [compareWith]="compareWith" multiple="true" (ionCancel)="ionCancelFiltrosGrupos()" (ionChange)="ionChangeFiltrosGrupos($event)">
                                     <ion-select-option *ngFor="let grupo of grupos" [value]="grupo">
                                         <span *ngIf="grupo.GrupoIngles=='NO'">{{grupo.Grado}}{{grupo.Grupo}} {{ grupo.Escolaridad}}</span>
                                         <span *ngIf="grupo.GrupoIngles=='SI'">Level {{grupo.Grado}}{{grupo.Grupo}} {{ grupo.Escolaridad}}</span>

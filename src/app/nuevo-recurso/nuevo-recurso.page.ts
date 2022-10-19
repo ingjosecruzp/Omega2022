@@ -4,7 +4,6 @@ import { FormGroup, FormBuilder,Validators  } from '@angular/forms';
 import { TareasService } from '../api/tareas.service';
 import { ChatService } from '../api/chat.service';
 import { MateriasService } from '../api/materias.service';
-import { element } from 'protractor';
 
 @Component({
   selector: 'app-nuevo-recurso',
@@ -29,7 +28,9 @@ export class NuevoRecursoPage implements OnInit {
   grupoSeleccionado: any;
   MateriaSeleccionada: any;
   EscolaridadSeleccionada:any;
-  tempGradoSeleccionado: number = 0;
+  tempGradoSeleccionado: string = "";
+  tempEscolaridadSeleccionado: string = "";
+  tempGrupoInglesSeleccionado: string = "";
   titulo: any;
   tituloBoton: any;
   banderaEdito: boolean=false;
@@ -113,6 +114,9 @@ export class NuevoRecursoPage implements OnInit {
   }
 
   async crearNoticia() {
+    this.ionCancelFiltrosGrupos();
+    this.filtrosGrupos.value = "";
+    
     const loading = await this.loadingController.create({
       message: 'Guardando...'
     });
@@ -139,7 +143,9 @@ export class NuevoRecursoPage implements OnInit {
         
         this.item = this.FrmItem.value;
         console.log(this.item);
-        
+        console.log(this.gradoSeleccionado);
+        console.log(this.grupoSeleccionado);
+
         const payload = new FormData();
         payload.append('Id', this.item.Id);
         payload.append('Titulo', this.item.Titulo);
@@ -171,23 +177,41 @@ export class NuevoRecursoPage implements OnInit {
         this.loadingController.dismiss();
 
         if(this.item.Id == 0) {
-          const alertTerminado = await this.alertCtrl.create({
-            header: 'Tarea creada con éxito',
-            backdropDismiss: false,
-            message: 'Se creó la tarea ' + this.FrmItem.get('Titulo').value + ', ¿desea crear otra tarea?',
-            buttons: [
-              {
-                text: 'No', handler: () =>  this.closeModal()
-              },
-              {
-                text: 'Crear otra', handler: () =>{ 
-                  this.FrmItem.reset(); 
-                  this.FrmItem.controls['Id'].setValue(0);
+          //Esta usando la opcion de multitarea por que selecciona mas de un grupo
+          if(!this.grupoSeleccionado.includes(",")) {
+              const alertTerminado = await this.alertCtrl.create({
+                header: 'Tarea creada con éxito',
+                backdropDismiss: false,
+                message: 'Se creó la tarea ' + this.FrmItem.get('Titulo').value + ', ¿desea crear otra tarea?',
+                buttons: [
+                  {
+                    text: 'No', handler: () =>  this.closeModal()
+                  },
+                  {
+                    text: 'Crear otra', handler: () =>{ 
+                      this.FrmItem.reset(); 
+                      this.FrmItem.controls['Id'].setValue(0);
+                      this.ionCancelFiltrosGrupos();
+                      this.filtrosGrupos.value ="";
+                    }
+                  }
+                ]
+              });
+
+              await alertTerminado.present();
+          } else {
+            const alertTerminado = await this.alertCtrl.create({
+              header: 'Tareas creadas con éxito',
+              backdropDismiss: false,
+              message: 'Se crearon las tareas ' + this.FrmItem.get('Titulo').value,
+              buttons: [
+                {
+                  text: 'Continuar', handler: () =>  this.closeModal()
                 }
-              }
-            ]
-          });
-          await alertTerminado.present();
+              ]
+            });
+            await alertTerminado.present();
+          }
         } else if(this.estadoFormulario=="clonar") {
             const alertTerminado = await this.alertCtrl.create({
               header: 'Tarea clonada con éxito',
@@ -215,7 +239,7 @@ export class NuevoRecursoPage implements OnInit {
         }
     }
     catch(error){
-
+      console.log(error);
       loading.dismiss();
 
       const alertTerminado = await this.alertCtrl.create({
@@ -269,15 +293,33 @@ export class NuevoRecursoPage implements OnInit {
   }
 
   async openPickerGrupos() {
-
     this.grupos = await this.apiChat.getGruposMaestros().toPromise();
     //console.log(this.grupos);
     let checkBoxes: HTMLCollection;
 
+    this.tempGradoSeleccionado = this.gradoSeleccionado == undefined ? "" : this.gradoSeleccionado;
+    this.tempEscolaridadSeleccionado = this.EscolaridadSeleccionada == undefined ? "" : this.EscolaridadSeleccionada;
+    this.tempGrupoInglesSeleccionado = this.GrupoIngles == undefined ? "" : this.GrupoIngles;
+
+    if(this.grupoSeleccionado != undefined) {
+      const constGrupoSeleccionado = this.grupoSeleccionado.replace(" ","").split(",");
+      //console.log(constGrupoSeleccionado);
+      for (let index = 0; index < constGrupoSeleccionado.length; index++) {
+        this.gruposSeleccionados.push({
+          Escolaridad: this.tempEscolaridadSeleccionado,
+          Grado: this.tempGradoSeleccionado,
+          Grupo: constGrupoSeleccionado[index],
+          GrupoIngles: this.tempGrupoInglesSeleccionado,
+          Id: 0,
+          UsuarioId: 34710
+        });
+      }
+    }
+
     this.filtrosGrupos.open().then(alert => {
-      console.log(alert);
+      //console.log(alert);
       checkBoxes = alert.getElementsByClassName("alert-checkbox-button");
-      console.log(checkBoxes);
+      //console.log(checkBoxes);
 
       let index=0;
       for(let item of checkBoxes) {
@@ -286,7 +328,7 @@ export class NuevoRecursoPage implements OnInit {
           const idCheck =(item as HTMLButtonElement).attributes["data-id"].value;
           this.triggerMe(item,idCheck);
         });
-        console.log(index);
+        //console.log(index);
         index += 1;
       }
 
@@ -332,25 +374,50 @@ export class NuevoRecursoPage implements OnInit {
   }
   triggerMe(item,index) {
     /*console.log(item);
-    console.log("selected value", this.grupos[index]);
-    console.log(this.gruposSeleccionados);*/
-    
-    if(this.tempGradoSeleccionado == 0)
+    console.log("selected value", this.grupos[index]);*/
+
+    if(this.tempGradoSeleccionado == "")
     {
         this.tempGradoSeleccionado = this.grupos[index].Grado;
+        this.tempEscolaridadSeleccionado = this.grupos[index].Escolaridad;
+        this.tempGrupoInglesSeleccionado = this.grupos[index].GrupoIngles;
         this.gruposSeleccionados.push({...this.grupos[index]});
+        //console.log(this.gruposSeleccionados);
         return;
     }
-    if(this.tempGradoSeleccionado != this.grupos[index].Grado) {
+    if(this.tempGradoSeleccionado != this.grupos[index].Grado || this.tempEscolaridadSeleccionado != this.grupos[index].Escolaridad || this.tempGrupoInglesSeleccionado != this.grupos[index].GrupoIngles) {
       console.log("grados diferentes");
       this.presentToast("No puede seleccionar dos grupos de grados diferentes.");
       (item as HTMLButtonElement).click();
+      return;
     }
+
+    const found =this.gruposSeleccionados.find(e => e.Grado==this.grupos[index].Grado && e.Grupo==this.grupos[index].Grupo && e.Escolaridad==this.grupos[index].Escolaridad);
+    if(found == undefined) {
+      this.gruposSeleccionados.push({...this.grupos[index]});
+    } else {
+      this.gruposSeleccionados = this.gruposSeleccionados.filter(item => item !== found);
+      if(this.gruposSeleccionados.length==0) {
+        this.tempGradoSeleccionado=  "";
+        this.tempEscolaridadSeleccionado = "";
+        this.tempGrupoInglesSeleccionado="";
+      }
+    }
+
+    //console.log(this.gruposSeleccionados);
+  }
+
+  ionCancelFiltrosGrupos() {
+    console.log("cancel filtros grupos");
+    this.tempGradoSeleccionado = "";
+    this.tempEscolaridadSeleccionado = "";
+    this.tempGrupoInglesSeleccionado = "";
+    this.gruposSeleccionados= [];
   }
 
   ionChangeFiltrosGrupos(event){
     console.log("ionChangeFiltrosGrupos");
-    console.log(event);
+    //console.log(event);
     let text="";
 
     if(!Array.isArray(event.detail.value))
@@ -367,21 +434,27 @@ export class NuevoRecursoPage implements OnInit {
       }
     });
 
-    console.log(text);
-    //const gradoGrupo = value.Grupos.value.split("/");
-    this.txtGradoGrupo.value = text;
-    this.gradoSeleccionado = event.detail.value[0].Grado;
-    this.grupoSeleccionado = event.detail.value.map(u => u.Grupo).join(', ');
-    this.EscolaridadSeleccionada = event.detail.value[0].Escolaridad;
-    this.GrupoIngles = event.detail.value[0].GrupoIngles;
+    if(event.detail.value.length==0) {
+      this.txtGradoGrupo.value = text;
+      this.ionCancelFiltrosGrupos();
+    } else {
+      console.log(text);
+      //const gradoGrupo = value.Grupos.value.split("/");
+      this.txtGradoGrupo.value = text;
+      this.gradoSeleccionado = event.detail.value[0].Grado;
+      this.grupoSeleccionado = event.detail.value.map(u => u.Grupo).join(', ');
+      this.EscolaridadSeleccionada = event.detail.value[0].Escolaridad;
+      this.GrupoIngles = event.detail.value[0].GrupoIngles;
+    }
 
     this.txtMateria.value = "";
     this.MateriaSeleccionada = "";
+    this.ionCancelFiltrosGrupos();
   }
 
   
   compareWith(o1: any, o2: any | any[]) {
-    console.log(o2);
+    //console.log(o2);
     
     if (!o1 || !o2) {
       //Entra la primera vez que no se ha seleccionado nada

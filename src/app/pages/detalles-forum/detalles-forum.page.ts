@@ -29,6 +29,7 @@ export class DetallesForumPage implements OnInit {
   @ViewChild('toolbar1', {read: ElementRef, static: true}) toolbar1: ElementRef;
   @ViewChild('input', {static: false}) input: IonTextarea;
   @ViewChild('Content', {static: true}) contentArea: IonContent;
+  eviandoMensaje:boolean = false;
 
 
 
@@ -95,50 +96,37 @@ export class DetallesForumPage implements OnInit {
   }
 
   async enviarMensaje() {
+    try{    
+      if(this.eviandoMensaje == true) {
+        return;
+      } 
 
-  //  console.log(this.FrmItem.value);
-    this.item = this.FrmItem.value;
-    if(this.item.mensaje==='') return;
+      //console.log(this.FrmItem.value);
+      this.item = this.FrmItem.value;
+      if(this.item.mensaje==='') return;
 
-    this.FrmItem.patchValue({
-      mensaje: ""
-    });
-  //  console.log(this.detalleId);
+      this.FrmItem.patchValue({
+        mensaje: ""
+      });
 
-    this.item.foroId = this.detalleId;
-    if(this.responder){
-      this.item.EsRespuesta="SI";
-      this.item.MensajeRespuesta=this.mensaje;
-      this.item.NombreUsuarioRespuesta=this.nombre;
-      this.slidingItem.closeOpened();
-      this.responder=false;
+      this.item.foroId = this.detalleId;
+      if(this.responder){
+        this.item.EsRespuesta="SI";
+        this.item.MensajeRespuesta=this.mensaje;
+        this.item.NombreUsuarioRespuesta=this.nombre;
+        this.slidingItem.closeOpened();
+        this.responder=false;
 
+      }
+      this.contentArea.scrollToPoint(0,0,200);
+
+      const tareaUpload = await this.apiForum.save(this.item).toPromise();
+      this.eviandoMensaje = false;
+    } catch(err) {
+      console.log(err);
+      this.eviandoMensaje = false;
     }
-    this.contentArea.scrollToPoint(0,0,200);
-  //  console.log("this.item");
-  //  console.log( this.item);
-
-  /*  const payload = new FormData();
-    payload.append('ForoId', this.detalleId.toString());
-    payload.append('Mensaje', this.item.Comentario);*/
-
-
-    const tareaUpload = await this.apiForum.save(this.item).toPromise();
-
-    /*let item2 = {
-      id: 60,
-      usuarioId: 1,
-      foroId: 2,
-      mensaje: 'refrescar',
-      fecha: '2020-06-05T00:00:00',
-      foro: null,
-      hora: '16:58:57'
-    };*/
-
-    //this.LstForo.unshift(this.item);
-    //this.applicationRef.tick();
-
-   // this.submitAttempt = false;
+   
   }
 
   private subscribeToEvents(): void {
