@@ -226,7 +226,7 @@
                                         </ion-avatar>
                                         <ion-label style="text-overflow: unset;white-space: unset;text-align: inherit;max-width: unset; ">
                                             <span *ngIf="item.TipoComentario=='Alumno' " class="spanComentarios " style="font-size: 12px;color: rgb(124 124 124); ">Alum. {{ item.Usuario.NombreCompleto }}</span>
-                                            <span *ngIf="item.TipoComentario=='Profesor' " class="spanComentarios " style="font-size: 12px;color: rgb(124 124 124); ">Prof. {{ item.Usuario.NombreCompleto }}</span>
+                                            <span *ngIf="item.TipoComentario=='Profesor' " class="spanComentarios " style="font-size: 12px;color: rgb(124 124 124); ">Prof. {{ item.Profesor.NombreCompleto }}</span>
                                             <span style="font-size: 12px;color: rgb(124 124 124)">{{ item.FechaComentario.split("T")[0] | date: 'MMM d, y'}}</span>
                                             <h3>{{ item.Comentario }}</h3>
                                         </ion-label>
